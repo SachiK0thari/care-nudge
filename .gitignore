@@ -1,0 +1,12 @@
+miscellaneous/
+.DS_Store
+.venv/
+__pycache__/
+outputs/
+reports/
+data/*.jsonl
+.env
+
+# global gitignore ignores *.txt; the Space needs these
+!requirements.txt
+!requirements-dev.txt

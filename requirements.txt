@@ -1,0 +1,4 @@
+# Runtime for the app (this is the file the Space installs; Gradio comes from sdk_version)
+torch>=2.8
+transformers>=5.0
+peft>=0.21

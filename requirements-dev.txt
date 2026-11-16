@@ -1,0 +1,9 @@
+-r requirements.txt
+gradio>=6.0
+trl>=1.18
+datasets>=5.0
+accelerate
+bitsandbytes; platform_system == "Linux"
+huggingface_hub>=2.0
+pyyaml
+pytest

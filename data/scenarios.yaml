@@ -1,0 +1,373 @@
+# Seed catalog for the synthetic dataset. DEMO CONTENT - not clinically validated.
+# Each scenario: 5 patient phrasings (first 3 -> train, last 2 -> held-out test).
+# level: EMERGENCY (911 / ED now) | URGENT (seen today) | SOON (primary care within days) | ROUTINE
+
+areas:
+  eye:
+    openers: ["Something is off with my eye.", "I've been having some trouble with my vision."]
+    question: "What exactly are you noticing - flashes, floaters, pain, redness, or any loss of vision? And when did it start?"
+  head:
+    openers: ["I've got a headache I'm not sure about.", "My head has been bothering me."]
+    question: "How did it start - suddenly or gradually - and do you have any fever, neck stiffness, weakness, or trouble speaking?"
+  chest:
+    openers: ["My chest feels weird.", "Something feels off when I breathe."]
+    question: "Is there any pain or pressure, does it spread anywhere, and did it come on suddenly?"
+  belly:
+    openers: ["My stomach has been off.", "I have some belly trouble."]
+    question: "Where is the pain, how severe is it, and have you noticed any blood, fever, or vomiting?"
+  back:
+    openers: ["My back is acting up.", "I hurt my back."]
+    question: "Do you have any numbness, leg weakness, or changes in bladder or bowel control along with the pain?"
+  skin:
+    openers: ["I have a skin thing I keep meaning to ask about.", "There's a spot on my skin."]
+    question: "Has it changed in size, shape, or color, and is there any pain, spreading redness, or fever?"
+  general:
+    openers: ["I haven't been feeling like myself lately.", "I have a health question."]
+    question: "What symptoms are you noticing, how long has this been going on, and is anything getting worse?"
+
+scenarios:
+  # ------------------------------ EMERGENCY ------------------------------
+  - id: heart_attack
+    level: EMERGENCY
+    area: chest
+    concern: possible heart attack
+    flags: [chest pressure or pain, pain spreading to arm or jaw, sweating or shortness of breath]
+    reply: "Chest pressure that spreads to the arm or jaw, especially with sweating or shortness of breath, can be a sign of a heart attack. Minutes matter here. Please call 911 now - do not drive yourself."
+    utterances:
+      - "There's a heavy pressure in the middle of my chest and it's going down my left arm."
+      - "My chest feels tight like someone is sitting on it, and I'm sweating a lot."
+      - "I've had squeezing chest pain for 20 minutes and my jaw aches too."
+      - "Crushing feeling in my chest, short of breath, and I feel sick to my stomach."
+      - "Pain in my chest keeps spreading to my shoulder and I'm clammy."
+  - id: stroke
+    level: EMERGENCY
+    area: head
+    concern: possible stroke or TIA
+    flags: [face drooping, arm or leg weakness on one side, slurred speech]
+    reply: "Sudden face drooping, weakness on one side, or slurred speech can be a sign of a stroke - even if it has already gone away. Treatment is time-critical. Please call 911 now and note the time the symptoms started."
+    utterances:
+      - "My husband's face is drooping on one side and his words are slurred."
+      - "My right arm suddenly went weak and I couldn't hold my coffee cup."
+      - "For about ten minutes I couldn't get my words out and my hand was numb, but it's fine now."
+      - "One side of my mouth is sagging and my speech sounds funny."
+      - "My left leg and arm went numb all of a sudden and I feel confused."
+  - id: thunderclap_headache
+    level: EMERGENCY
+    area: head
+    concern: possible bleeding in the brain
+    flags: [sudden severe headache, worst headache of life]
+    reply: "A headache that hits suddenly and is the worst of your life can be a sign of bleeding in the brain. This needs emergency evaluation right away. Please call 911 or have someone take you to the emergency department now."
+    utterances:
+      - "Out of nowhere I got the worst headache of my life, like being hit with a hammer."
+      - "A sudden explosive headache started a few minutes ago and it's unbearable."
+      - "I've never had a headache this bad - it came on in seconds."
+      - "It felt like a thunderclap in my head and now my neck hurts too."
+      - "Worst headache I have ever had, started instantly while I was lifting something."
+  - id: anaphylaxis
+    level: EMERGENCY
+    area: chest
+    concern: possible severe allergic reaction
+    flags: [swelling of lips, tongue or throat, trouble breathing, hives after exposure]
+    reply: "Swelling of the lips, tongue, or throat with trouble breathing can be a severe allergic reaction. Use an epinephrine auto-injector if you have one and call 911 now."
+    utterances:
+      - "I ate shrimp and now my lips are swelling and my throat feels tight."
+      - "I got stung by a bee and I'm breaking out in hives and wheezing."
+      - "My tongue feels swollen and it's getting hard to breathe after taking a new antibiotic."
+      - "My throat is closing up and my face is puffy after eating peanuts."
+      - "Hives all over and I can't catch my breath since the wasp sting."
+  - id: pulmonary_embolism
+    level: EMERGENCY
+    area: chest
+    concern: possible blood clot in the lung
+    flags: [sudden shortness of breath, sharp chest pain when breathing, recent surgery or long travel]
+    reply: "Sudden shortness of breath with sharp chest pain, especially after surgery or a long trip, can be a sign of a blood clot in the lung. Please call 911 or go to the emergency department now."
+    utterances:
+      - "I suddenly can't catch my breath and it hurts to breathe in. I flew back from Asia two days ago."
+      - "Since my knee surgery last week I've gotten very short of breath all of a sudden."
+      - "Sharp pain in my chest when I inhale and my heart is racing out of nowhere."
+      - "I'm suddenly winded just sitting here and I coughed up a little blood."
+      - "Had a long road trip, now sudden trouble breathing and stabbing chest pain."
+  - id: vision_loss
+    level: EMERGENCY
+    area: eye
+    concern: possible retinal detachment or blocked blood vessel in the eye
+    flags: [sudden vision loss, curtain or shadow over vision]
+    reply: "Sudden loss of vision or a curtain or shadow coming across your sight can mean the retina is detaching or blood flow to the eye is blocked. Vision can be lost permanently within hours. Please go to the emergency department now."
+    utterances:
+      - "A dark curtain is coming down over the vision in my left eye."
+      - "I suddenly can't see out of my right eye, and it doesn't hurt."
+      - "There's a gray shadow covering half of what I see in one eye since this morning."
+      - "My vision in one eye just went black for no reason."
+      - "It looks like a veil is being pulled across my eye from the side."
+  - id: gi_bleed
+    level: EMERGENCY
+    area: belly
+    concern: possible bleeding in the stomach or intestines
+    flags: [vomiting blood, black tarry stools]
+    reply: "Vomiting blood or passing black, tarry stools can be a sign of bleeding in the digestive tract, which can become serious quickly. Please go to the emergency department now, or call 911 if you feel faint."
+    utterances:
+      - "I just threw up and there was blood in it."
+      - "My stools have been black and tarry and I feel lightheaded."
+      - "I vomited something that looked like coffee grounds."
+      - "There was a lot of dark red blood when I vomited this morning."
+      - "Jet black sticky poop for two days and now I'm dizzy when I stand."
+  - id: suicidal_thoughts
+    level: EMERGENCY
+    area: general
+    concern: risk of self-harm
+    flags: [thoughts of suicide or self-harm]
+    reply: "I'm really glad you told me, and I'm sorry you're carrying this. You deserve support right now: please call or text 988 (Suicide & Crisis Lifeline) to talk with someone, or call 911 if you are in immediate danger."
+    utterances:
+      - "I've been thinking about ending my life."
+      - "I don't want to be alive anymore."
+      - "Lately I keep thinking everyone would be better off without me and I've thought about how I'd do it."
+      - "I feel like killing myself."
+      - "I've been having thoughts of hurting myself and they're getting stronger."
+  - id: cauda_equina
+    level: EMERGENCY
+    area: back
+    concern: possible pressure on the spinal nerves
+    flags: [numbness in groin or inner thighs, loss of bladder or bowel control, new leg weakness with back pain]
+    reply: "Back pain together with numbness in the groin, new leg weakness, or loss of bladder or bowel control can mean the nerves at the base of the spine are being compressed. Permanent damage can happen without fast treatment. Please go to the emergency department now."
+    utterances:
+      - "My back pain got worse and now I'm numb between my legs and can't tell when I need to pee."
+      - "Bad lower back pain and I just lost control of my bladder."
+      - "Both my legs feel weak and the area I sit on is numb since my back went out."
+      - "I can't feel myself wiping and my back is killing me."
+      - "Since yesterday I've had back pain, my legs keep giving way, and I wet myself without feeling it."
+  - id: infant_fever
+    level: EMERGENCY
+    area: general
+    concern: possible serious infection in a young infant
+    flags: [fever in a baby under 3 months]
+    reply: "A temperature of 100.4 F (38 C) or higher in a baby under 3 months can be a sign of a serious infection, even if the baby looks okay. Please take your baby to the emergency department now."
+    utterances:
+      - "My 6 week old has a temperature of 100.8."
+      - "My newborn feels hot and the thermometer says 101."
+      - "Our two month old has a fever of 100.5 and is sleepier than usual."
+      - "My baby is 5 weeks old and running a fever of 38.3 C."
+      - "3 week old with a rectal temp of 100.6 and not feeding well."
+  # ------------------------------- URGENT --------------------------------
+  - id: retinal_flashes
+    level: URGENT
+    area: eye
+    concern: possible retinal tear or early retinal detachment
+    flags: [new flashes of light, sudden increase in floaters]
+    reply: "New flashes of light or a sudden shower of floaters can be a sign of a retinal tear, which can lead to a detachment and permanent vision loss if it isn't treated quickly. You should have a dilated eye exam today. If a curtain or shadow appears or you lose vision, go to the emergency department right away."
+    utterances:
+      - "I keep seeing white flashes in front of my right eye."
+      - "Since yesterday there are flashes of light at the edge of my vision and a bunch of new floaters."
+      - "I suddenly have lots of little black specks floating in one eye."
+      - "There are lightning streaks in the corner of my left eye when I move it."
+      - "A shower of new floaters showed up today along with flickering lights in one eye."
+  - id: dvt
+    level: URGENT
+    area: general
+    concern: possible blood clot in the leg
+    flags: [one-sided leg swelling, calf pain and warmth]
+    reply: "Swelling, pain, and warmth in one calf can be a sign of a blood clot in the leg, which can travel to the lungs. You should be examined today. If you develop chest pain or shortness of breath, call 911."
+    utterances:
+      - "My left calf is swollen, warm, and sore, and the other leg is fine."
+      - "One leg is noticeably bigger than the other and the calf hurts when I walk."
+      - "My right lower leg has been red and puffy and tender since my long flight."
+      - "Only my left leg is swollen and it aches deep in the calf."
+      - "My calf is tight, warm, and painful on one side after being laid up for a week."
+  - id: sudden_hearing_loss
+    level: URGENT
+    area: general
+    concern: possible sudden sensorineural hearing loss
+    flags: [sudden hearing loss in one ear]
+    reply: "Hearing that drops suddenly in one ear can be an inner-ear emergency, and treatment works best when it starts within the first few days. You should be seen today rather than waiting to see if it clears."
+    utterances:
+      - "I woke up and I can barely hear out of my left ear."
+      - "My right ear suddenly went muffled yesterday and now it's ringing."
+      - "All of a sudden I lost most of the hearing in one ear."
+      - "One ear just went deaf this morning, no pain or cold."
+      - "Hearing in my left ear dropped out of nowhere and everything sounds far away."
+  - id: kidney_infection
+    level: URGENT
+    area: belly
+    concern: possible kidney infection
+    flags: [fever with flank or back pain, burning with urination]
+    reply: "Fever with pain in your side or back and burning when you urinate can mean a bladder infection has reached the kidney. This needs treatment today. If you can't keep fluids down or feel confused or faint, go to the emergency department."
+    utterances:
+      - "It burns when I pee and now I have a fever and pain in my right side."
+      - "I've had a UTI for a few days and now my back hurts under my ribs and I have chills."
+      - "Fever of 102, aching in my flank, and I'm peeing constantly."
+      - "Shaking chills and a deep ache on one side of my back, plus painful urination."
+      - "My urine is cloudy, it stings, and since last night I've had a fever and side pain."
+  - id: cellulitis
+    level: URGENT
+    area: skin
+    concern: possible spreading skin infection
+    flags: [spreading redness and warmth, red streaks, fever with a skin wound]
+    reply: "Redness that is spreading, feels warm, or has red streaks - especially with fever - can be a skin infection moving into deeper tissue. It should be looked at and treated today."
+    utterances:
+      - "The cut on my shin is surrounded by redness that keeps spreading and it feels hot."
+      - "There's a red streak going up my arm from a scratch and I feel feverish."
+      - "My foot is red, swollen, and warm around a blister and the red area is bigger than yesterday."
+      - "The skin around my bug bite is hot and the redness doubled in size overnight."
+      - "I have a wound that's oozing and the redness is creeping up my leg, plus chills."
+  - id: shingles_eye
+    level: URGENT
+    area: eye
+    concern: possible shingles affecting the eye
+    flags: [painful blistering rash near the eye, rash on one side of the forehead]
+    reply: "A painful, blistering rash on one side of the forehead or around the eye can be shingles involving the eye, which can damage vision. Antiviral treatment works best when started early, so you should be seen today."
+    utterances:
+      - "I have a burning, blistery rash on one side of my forehead and my eye is red."
+      - "Painful blisters showed up on the tip of my nose and around my left eye."
+      - "There's a tingling rash with little blisters above my right eyebrow, only on that side."
+      - "One side of my forehead is covered in painful blisters and my eyelid is swelling."
+      - "A stinging band of blisters near my eye appeared two days ago."
+  # -------------------------------- SOON ---------------------------------
+  - id: changing_mole
+    level: SOON
+    area: skin
+    concern: possible skin cancer
+    flags: [mole changing in size, shape or color]
+    reply: "A mole that is changing in size, shape, or color, or that bleeds or itches, should be checked because it can be an early sign of skin cancer. It isn't an emergency, but please don't put it off - book a visit within the next week or two."
+    utterances:
+      - "A mole on my back has gotten bigger and darker over the last few months."
+      - "I have a spot on my arm with uneven edges that now has two colors."
+      - "My mole started itching and bled a little when I touched it."
+      - "The mole on my shoulder used to be round and now it looks lopsided."
+      - "My partner says the dark spot on my back has grown and the border looks jagged."
+  - id: rectal_bleeding
+    level: SOON
+    area: belly
+    concern: possible bowel condition that needs evaluation
+    flags: [blood in stool, change in bowel habits]
+    reply: "Blood in the stool or a lasting change in bowel habits is often from something minor, but it can also be an early sign of bowel disease, including cancer. Please book a primary care visit in the next few days so it can be checked."
+    utterances:
+      - "I've noticed bright red blood on the toilet paper for a few weeks now."
+      - "My bowel habits changed a month ago and sometimes there's blood mixed in."
+      - "There's been a little blood in my stool on and off for three weeks."
+      - "I keep seeing streaks of red blood when I go to the bathroom and my stools are thinner."
+      - "For the past month I've been constipated, which is new, and I saw blood twice."
+  - id: postmenopausal_bleeding
+    level: SOON
+    area: general
+    concern: possible uterine condition that needs evaluation
+    flags: [vaginal bleeding after menopause]
+    reply: "Any vaginal bleeding after menopause should be evaluated, because it can be an early sign of a problem with the uterus, including cancer. Please book a visit within the next week."
+    utterances:
+      - "I went through menopause five years ago and I just had some bleeding."
+      - "I'm 62 and noticed spotting, even though I haven't had a period in years."
+      - "I'm post-menopausal and there was blood in my underwear twice this month."
+      - "My periods stopped at 51 and now, three years later, I'm bleeding lightly."
+      - "Light vaginal bleeding at 67 - I thought I was long past all that."
+  - id: breast_lump
+    level: SOON
+    area: general
+    concern: breast change that needs evaluation
+    flags: [new breast lump]
+    reply: "Most breast lumps are not cancer, but any new lump should be examined and may need imaging. Please book a visit this week rather than waiting to see if it goes away."
+    utterances:
+      - "I found a hard lump in my left breast in the shower."
+      - "There's a new lump near my armpit on the breast that wasn't there last month."
+      - "I can feel a small firm knot in my right breast and it doesn't move much."
+      - "My breast has a lump and the skin over it looks dimpled."
+      - "I noticed a pea-sized lump in my breast a couple of weeks ago and it's still there."
+  - id: weight_loss_night_sweats
+    level: SOON
+    area: general
+    concern: unexplained weight loss that needs evaluation
+    flags: [unintentional weight loss, drenching night sweats]
+    reply: "Losing weight without trying, especially with drenching night sweats or ongoing fatigue, should be evaluated because it can be a sign of an underlying illness. Please book a primary care visit in the next few days."
+    utterances:
+      - "I've lost 15 pounds in two months without trying."
+      - "I keep waking up drenched in sweat and my clothes are getting loose."
+      - "I'm dropping weight even though I'm eating normally and I'm tired all the time."
+      - "Soaking night sweats for three weeks and I'm down ten pounds."
+      - "My pants are falling off - I've lost a lot of weight and I don't know why."
+  - id: thirst_urination
+    level: SOON
+    area: general
+    concern: possible diabetes
+    flags: [excessive thirst, frequent urination]
+    reply: "Being very thirsty and urinating much more than usual can be an early sign of diabetes, which a simple blood test can check. Please book a visit this week. If you also have vomiting, belly pain, or confusion, go to the emergency department."
+    utterances:
+      - "I'm thirsty all the time and peeing every hour."
+      - "Lately I can't stop drinking water and I'm up four times a night to urinate."
+      - "I've been extremely thirsty, urinating constantly, and my vision is a bit blurry."
+      - "For a couple of weeks I've been peeing nonstop and I'm always parched."
+      - "I drink gallons and still feel thirsty, and I'm going to the bathroom constantly."
+  # ------------------------------- ROUTINE -------------------------------
+  - id: stable_floaters
+    level: ROUTINE
+    area: eye
+    concern: long-standing floaters without change
+    flags: []
+    reply: "A few floaters that have looked the same for years, with no flashes and no change in vision, are common and usually harmless. Mention them at your next routine eye exam. If you ever notice a sudden increase, flashes of light, or a shadow in your vision, get seen the same day."
+    utterances:
+      - "I've had the same couple of floaters for years and they haven't changed. No flashes."
+      - "There's one little squiggly floater I've seen since college, nothing new."
+      - "I notice my usual few floaters when I look at the sky, same as always, no vision loss."
+      - "My old floaters are still there, no flashes and no new ones."
+      - "I've always had a speck that drifts in my eye, it hasn't changed in a decade."
+  - id: tension_headache
+    level: ROUTINE
+    area: head
+    concern: typical tension-type headache
+    flags: []
+    reply: "A mild, familiar headache that builds gradually and eases with rest or an over-the-counter pain reliever is usually a tension-type headache. Rest, fluids, and screen breaks often help. If a headache is sudden and severe, or comes with fever, weakness, or vision changes, get care right away."
+    utterances:
+      - "I get a dull headache at the end of long workdays, same as I have for years."
+      - "Mild band-like headache this afternoon, it usually goes away when I rest."
+      - "My usual stress headache is back, nothing different about it."
+      - "I have a mild headache after staring at my screen all day, no other symptoms."
+      - "Just my regular tension headache, it eases up with ibuprofen."
+  - id: common_cold
+    level: ROUTINE
+    area: general
+    concern: likely common cold
+    flags: []
+    reply: "A runny nose, sore throat, and mild cough for a couple of days without a high fever is usually a common cold. Rest, fluids, and over-the-counter remedies can help. Book a visit if it lasts more than 10 days, or get care sooner if you have trouble breathing or a high fever."
+    utterances:
+      - "I've had a runny nose and a scratchy throat for two days. No fever."
+      - "Stuffy nose and sneezing since yesterday, otherwise I feel okay."
+      - "Mild cough and congestion for three days, I'm eating and drinking fine."
+      - "Sniffles and a slightly sore throat, my temperature is normal."
+      - "Just a head cold I think - congested and a bit tired for a day or two."
+  - id: back_strain
+    level: ROUTINE
+    area: back
+    concern: likely muscle strain
+    flags: []
+    reply: "Lower back soreness after lifting or activity, with no numbness, no leg weakness, and normal bladder and bowel control, is usually a muscle strain. Gentle movement, heat, and over-the-counter pain relief help most people. Book a visit if it isn't improving in a couple of weeks."
+    utterances:
+      - "My lower back is sore after moving furniture yesterday. No numbness and my legs feel fine."
+      - "I tweaked my back gardening, it aches when I bend but no weakness or bladder problems."
+      - "Stiff lower back since the gym on Monday, it's slowly getting better."
+      - "My back muscles are sore after shoveling, no pain down the legs and no numbness."
+      - "Pulled something in my back lifting a box, it's just achy."
+  - id: refill_request
+    level: ROUTINE
+    area: general
+    concern: administrative request
+    flags: []
+    reply: "You can request a refill from the Medications section of the app, or ask your pharmacy to send the request to your care team. If you're about to run out, let the pharmacy know so they can help bridge the gap."
+    utterances:
+      - "How do I get a refill of my blood pressure medication?"
+      - "I need to renew my allergy prescription."
+      - "Can I request a refill through the app?"
+      - "My thyroid pills are almost out, how do I order more?"
+      - "Where do I go to renew a prescription?"
+
+# Informational questions: nobody is reporting a symptom. build_dataset.py writes
+# them to data/probes.jsonl. Never train on these; they test whether the assistant
+# escalates a question ABOUT a warning sign as if the person HAD it.
+info_probes:
+  - "What are the early warning signs of a stroke?"
+  - "What are the common symptoms of type 2 diabetes?"
+  - "What are the common side effects of ibuprofen?"
+  - "What vaccinations are recommended for adults over 65?"
+  - "How is pneumonia usually diagnosed?"
+  - "What lifestyle changes help with high cholesterol?"
+  - "What causes eye floaters as people get older?"
+  - "How can I tell a tension headache from a migraine?"
+  - "How often should I get a skin check for moles?"
+  - "What does a heart attack feel like - is it always chest pain?"
+  - "At what age should I start colon cancer screening?"
+  - "What is the difference between a cold and the flu?"
