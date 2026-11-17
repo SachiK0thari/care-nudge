@@ -32,7 +32,10 @@ scenarios:
     area: chest
     concern: possible heart attack
     flags: [chest pressure or pain, pain spreading to arm or jaw, sweating or shortness of breath]
-    reply: "Chest pressure that spreads to the arm or jaw, especially with sweating or shortness of breath, can be a sign of a heart attack. Minutes matter here. Please call 911 now - do not drive yourself."
+    replies:
+      - "Chest pressure that spreads to the arm or jaw, especially with sweating or shortness of breath, can be a sign of a heart attack. Minutes matter here. Please call 911 now - do not drive yourself."
+      - "Pressure or squeezing in the chest that spreads to your arm or jaw, particularly with sweating or breathlessness, can mean a heart attack. Every minute counts. Call 911 right now, and do not drive yourself to the hospital."
+      - "What you're describing - chest pressure spreading toward your arm or jaw, with sweating or shortness of breath - can be a heart attack. This can't wait. Please call 911 now rather than driving yourself."
     utterances:
       - "There's a heavy pressure in the middle of my chest and it's going down my left arm."
       - "My chest feels tight like someone is sitting on it, and I'm sweating a lot."
@@ -44,7 +47,10 @@ scenarios:
     area: head
     concern: possible stroke or TIA
     flags: [face drooping, arm or leg weakness on one side, slurred speech]
-    reply: "Sudden face drooping, weakness on one side, or slurred speech can be a sign of a stroke - even if it has already gone away. Treatment is time-critical. Please call 911 now and note the time the symptoms started."
+    replies:
+      - "Sudden face drooping, weakness on one side, or slurred speech can be a sign of a stroke - even if it has already gone away. Treatment is time-critical. Please call 911 now and note the time the symptoms started."
+      - "A face that droops, weakness on one side of the body, or speech that suddenly slurs can be a stroke, even if it passes. Stroke treatment depends on speed. Call 911 right away and write down when the symptoms began."
+      - "These can be stroke warning signs: one side of the face drooping, sudden one-sided weakness or numbness, or trouble getting words out. They still count even if they have stopped. Please call 911 now and note what time it started."
     utterances:
       - "My husband's face is drooping on one side and his words are slurred."
       - "My right arm suddenly went weak and I couldn't hold my coffee cup."
@@ -56,7 +62,10 @@ scenarios:
     area: head
     concern: possible bleeding in the brain
     flags: [sudden severe headache, worst headache of life]
-    reply: "A headache that hits suddenly and is the worst of your life can be a sign of bleeding in the brain. This needs emergency evaluation right away. Please call 911 or have someone take you to the emergency department now."
+    replies:
+      - "A headache that hits suddenly and is the worst of your life can be a sign of bleeding in the brain. This needs emergency evaluation right away. Please call 911 or have someone take you to the emergency department now."
+      - "A sudden, severe headache that is the worst you've ever had can be caused by bleeding in the brain. It needs emergency care immediately. Call 911 now, or have someone drive you to the emergency department."
+      - "When a headache comes on in seconds and is the worst of your life, bleeding in the brain has to be ruled out right away. Please call 911 or get someone to take you to the emergency department now - don't wait for it to ease."
     utterances:
       - "Out of nowhere I got the worst headache of my life, like being hit with a hammer."
       - "A sudden explosive headache started a few minutes ago and it's unbearable."
@@ -68,7 +77,10 @@ scenarios:
     area: chest
     concern: possible severe allergic reaction
     flags: [swelling of lips, tongue or throat, trouble breathing, hives after exposure]
-    reply: "Swelling of the lips, tongue, or throat with trouble breathing can be a severe allergic reaction. Use an epinephrine auto-injector if you have one and call 911 now."
+    replies:
+      - "Swelling of the lips, tongue, or throat with trouble breathing can be a severe allergic reaction. Use an epinephrine auto-injector if you have one and call 911 now."
+      - "Swollen lips, tongue, or throat along with difficulty breathing can be anaphylaxis, a severe allergic reaction. If you have an epinephrine auto-injector, use it now, and call 911."
+      - "Hives with wheezing, or swelling in your lips, tongue, or throat, can mean a severe allergic reaction that can close the airway. Use your epinephrine auto-injector if you carry one and call 911 right away."
     utterances:
       - "I ate shrimp and now my lips are swelling and my throat feels tight."
       - "I got stung by a bee and I'm breaking out in hives and wheezing."
@@ -80,7 +92,10 @@ scenarios:
     area: chest
     concern: possible blood clot in the lung
     flags: [sudden shortness of breath, sharp chest pain when breathing, recent surgery or long travel]
-    reply: "Sudden shortness of breath with sharp chest pain, especially after surgery or a long trip, can be a sign of a blood clot in the lung. Please call 911 or go to the emergency department now."
+    replies:
+      - "Sudden shortness of breath with sharp chest pain, especially after surgery or a long trip, can be a sign of a blood clot in the lung. Please call 911 or go to the emergency department now."
+      - "Shortness of breath that comes on suddenly with sharp chest pain, particularly after surgery or long travel, can be a blood clot in the lung. Call 911 or go to the emergency department right away."
+      - "A blood clot in the lung can cause sudden breathlessness and sharp pain when you breathe in, and recent surgery or a long trip raises that risk. This needs emergency care: please call 911 or go to the emergency department now."
     utterances:
       - "I suddenly can't catch my breath and it hurts to breathe in. I flew back from Asia two days ago."
       - "Since my knee surgery last week I've gotten very short of breath all of a sudden."
@@ -92,7 +107,10 @@ scenarios:
     area: eye
     concern: possible retinal detachment or blocked blood vessel in the eye
     flags: [sudden vision loss, curtain or shadow over vision]
-    reply: "Sudden loss of vision or a curtain or shadow coming across your sight can mean the retina is detaching or blood flow to the eye is blocked. Vision can be lost permanently within hours. Please go to the emergency department now."
+    replies:
+      - "Sudden loss of vision or a curtain or shadow coming across your sight can mean the retina is detaching or blood flow to the eye is blocked. Vision can be lost permanently within hours. Please go to the emergency department now."
+      - "Losing vision suddenly, or seeing a shadow or curtain move across your sight, can mean a detaching retina or a blocked blood vessel in the eye. Sight can be lost for good within hours, so please go to the emergency department now."
+      - "A curtain, shadow, or sudden loss of sight in one eye is an eye emergency - it can come from retinal detachment or a blocked blood vessel. Waiting even a few hours can mean permanent vision loss. Please go to the emergency department right away."
     utterances:
       - "A dark curtain is coming down over the vision in my left eye."
       - "I suddenly can't see out of my right eye, and it doesn't hurt."
@@ -104,7 +122,10 @@ scenarios:
     area: belly
     concern: possible bleeding in the stomach or intestines
     flags: [vomiting blood, black tarry stools]
-    reply: "Vomiting blood or passing black, tarry stools can be a sign of bleeding in the digestive tract, which can become serious quickly. Please go to the emergency department now, or call 911 if you feel faint."
+    replies:
+      - "Vomiting blood or passing black, tarry stools can be a sign of bleeding in the digestive tract, which can become serious quickly. Please go to the emergency department now, or call 911 if you feel faint."
+      - "Blood in vomit, vomit that looks like coffee grounds, or black tarry stools can mean bleeding in the digestive tract, and that can get serious fast. Go to the emergency department now, and call 911 if you feel faint or dizzy."
+      - "Throwing up blood or having black, sticky stools can be a sign of bleeding in the stomach or intestines. This needs emergency care now: please go to the emergency department, or call 911 if you feel lightheaded or faint."
     utterances:
       - "I just threw up and there was blood in it."
       - "My stools have been black and tarry and I feel lightheaded."
@@ -116,7 +137,10 @@ scenarios:
     area: general
     concern: risk of self-harm
     flags: [thoughts of suicide or self-harm]
-    reply: "I'm really glad you told me, and I'm sorry you're carrying this. You deserve support right now: please call or text 988 (Suicide & Crisis Lifeline) to talk with someone, or call 911 if you are in immediate danger."
+    replies:
+      - "I'm really glad you told me, and I'm sorry you're carrying this. You deserve support right now: please call or text 988 (Suicide & Crisis Lifeline) to talk with someone, or call 911 if you are in immediate danger."
+      - "Thank you for telling me - that took courage, and you don't have to handle this alone. Please call or text 988 (Suicide & Crisis Lifeline) now to talk with someone, or call 911 if you are in immediate danger."
+      - "I'm so sorry you're feeling this way, and I'm glad you reached out. Right now, please call or text 988 (Suicide & Crisis Lifeline) - they are there to listen at any hour. If you are in immediate danger, call 911."
     utterances:
       - "I've been thinking about ending my life."
       - "I don't want to be alive anymore."
@@ -128,7 +152,10 @@ scenarios:
     area: back
     concern: possible pressure on the spinal nerves
     flags: [numbness in groin or inner thighs, loss of bladder or bowel control, new leg weakness with back pain]
-    reply: "Back pain together with numbness in the groin, new leg weakness, or loss of bladder or bowel control can mean the nerves at the base of the spine are being compressed. Permanent damage can happen without fast treatment. Please go to the emergency department now."
+    replies:
+      - "Back pain together with numbness in the groin, new leg weakness, or loss of bladder or bowel control can mean the nerves at the base of the spine are being compressed. Permanent damage can happen without fast treatment. Please go to the emergency department now."
+      - "Numbness in the groin or inner thighs, new weakness in the legs, or losing bladder or bowel control along with back pain can mean the nerves at the bottom of the spine are being squeezed. Without fast treatment the damage can be permanent. Please go to the emergency department now."
+      - "When back pain comes with numbness in the saddle area, legs that feel weak, or changes in bladder or bowel control, the spinal nerves may be under pressure. This needs emergency treatment to prevent lasting damage. Please go to the emergency department right away."
     utterances:
       - "My back pain got worse and now I'm numb between my legs and can't tell when I need to pee."
       - "Bad lower back pain and I just lost control of my bladder."
@@ -140,7 +167,10 @@ scenarios:
     area: general
     concern: possible serious infection in a young infant
     flags: [fever in a baby under 3 months]
-    reply: "A temperature of 100.4 F (38 C) or higher in a baby under 3 months can be a sign of a serious infection, even if the baby looks okay. Please take your baby to the emergency department now."
+    replies:
+      - "A temperature of 100.4 F (38 C) or higher in a baby under 3 months can be a sign of a serious infection, even if the baby looks okay. Please take your baby to the emergency department now."
+      - "In a baby younger than 3 months, a temperature of 100.4 F (38 C) or above can signal a serious infection, even when the baby seems fine. Please take your baby to the emergency department now."
+      - "Babies under 3 months can't fight infection the way older children can, so a temperature of 100.4 F (38 C) or higher needs emergency care, even if your baby looks well. Please go to the emergency department now."
     utterances:
       - "My 6 week old has a temperature of 100.8."
       - "My newborn feels hot and the thermometer says 101."
@@ -153,7 +183,10 @@ scenarios:
     area: eye
     concern: possible retinal tear or early retinal detachment
     flags: [new flashes of light, sudden increase in floaters]
-    reply: "New flashes of light or a sudden shower of floaters can be a sign of a retinal tear, which can lead to a detachment and permanent vision loss if it isn't treated quickly. You should have a dilated eye exam today. If a curtain or shadow appears or you lose vision, go to the emergency department right away."
+    replies:
+      - "New flashes of light or a sudden shower of floaters can be a sign of a retinal tear, which can lead to a detachment and permanent vision loss if it isn't treated quickly. You should have a dilated eye exam today. If a curtain or shadow appears or you lose vision, go to the emergency department right away."
+      - "Seeing new flashes of light or a sudden burst of floaters can mean the retina has torn, and a tear can turn into a detachment with permanent vision loss. Please get a dilated eye exam today. If you see a curtain or shadow, or lose vision, go to the emergency department immediately."
+      - "A sudden increase in floaters or new flashes of light can come from a retinal tear. Caught early it can be treated, but left alone it can lead to detachment and lasting vision loss. You should be examined today, and if a shadow or curtain appears or your vision drops, go to the emergency department right away."
     utterances:
       - "I keep seeing white flashes in front of my right eye."
       - "Since yesterday there are flashes of light at the edge of my vision and a bunch of new floaters."
@@ -165,7 +198,10 @@ scenarios:
     area: general
     concern: possible blood clot in the leg
     flags: [one-sided leg swelling, calf pain and warmth]
-    reply: "Swelling, pain, and warmth in one calf can be a sign of a blood clot in the leg, which can travel to the lungs. You should be examined today. If you develop chest pain or shortness of breath, call 911."
+    replies:
+      - "Swelling, pain, and warmth in one calf can be a sign of a blood clot in the leg, which can travel to the lungs. You should be examined today. If you develop chest pain or shortness of breath, call 911."
+      - "A calf that is swollen, painful, and warm on one side only can be a blood clot in the leg, and a clot can travel to the lungs. Please be examined today. If you get chest pain or shortness of breath, call 911."
+      - "One-sided leg swelling with calf pain and warmth can mean a deep vein blood clot, which can break off and reach the lungs. This should be checked today. Call 911 if you develop chest pain or trouble breathing."
     utterances:
       - "My left calf is swollen, warm, and sore, and the other leg is fine."
       - "One leg is noticeably bigger than the other and the calf hurts when I walk."
@@ -177,7 +213,10 @@ scenarios:
     area: general
     concern: possible sudden sensorineural hearing loss
     flags: [sudden hearing loss in one ear]
-    reply: "Hearing that drops suddenly in one ear can be an inner-ear emergency, and treatment works best when it starts within the first few days. You should be seen today rather than waiting to see if it clears."
+    replies:
+      - "Hearing that drops suddenly in one ear can be an inner-ear emergency, and treatment works best when it starts within the first few days. You should be seen today rather than waiting to see if it clears."
+      - "Sudden hearing loss in one ear can be an inner-ear emergency, and treatment is most effective when it begins within the first few days. Please be seen today instead of waiting for it to come back on its own."
+      - "When hearing drops out suddenly in one ear, the inner ear or its nerve may be affected, and the window for treatment is short. You should be seen today - this is not something to sit out."
     utterances:
       - "I woke up and I can barely hear out of my left ear."
       - "My right ear suddenly went muffled yesterday and now it's ringing."
@@ -189,7 +228,10 @@ scenarios:
     area: belly
     concern: possible kidney infection
     flags: [fever with flank or back pain, burning with urination]
-    reply: "Fever with pain in your side or back and burning when you urinate can mean a bladder infection has reached the kidney. This needs treatment today. If you can't keep fluids down or feel confused or faint, go to the emergency department."
+    replies:
+      - "Fever with pain in your side or back and burning when you urinate can mean a bladder infection has reached the kidney. This needs treatment today. If you can't keep fluids down or feel confused or faint, go to the emergency department."
+      - "Burning when you urinate plus fever and pain in your side or back can mean the infection has spread up to the kidney. This needs treatment today. If you can't keep fluids down, or you feel confused or faint, go to the emergency department."
+      - "A urinary infection with fever, chills, or pain in your flank can mean it has reached the kidney, and that needs treatment today. Go to the emergency department if you are vomiting and can't keep fluids down, or if you feel confused or faint."
     utterances:
       - "It burns when I pee and now I have a fever and pain in my right side."
       - "I've had a UTI for a few days and now my back hurts under my ribs and I have chills."
@@ -201,7 +243,10 @@ scenarios:
     area: skin
     concern: possible spreading skin infection
     flags: [spreading redness and warmth, red streaks, fever with a skin wound]
-    reply: "Redness that is spreading, feels warm, or has red streaks - especially with fever - can be a skin infection moving into deeper tissue. It should be looked at and treated today."
+    replies:
+      - "Redness that is spreading, feels warm, or has red streaks - especially with fever - can be a skin infection moving into deeper tissue. It should be looked at and treated today."
+      - "Skin redness that keeps spreading, feels warm, or has red streaks, particularly with a fever, can be an infection moving deeper into the tissue. It needs to be looked at and treated today."
+      - "When redness around a wound grows, feels hot, or sends red streaks up the limb - especially if you have a fever or chills - the infection may be spreading. Please be seen today so it can be treated."
     utterances:
       - "The cut on my shin is surrounded by redness that keeps spreading and it feels hot."
       - "There's a red streak going up my arm from a scratch and I feel feverish."
@@ -213,7 +258,10 @@ scenarios:
     area: eye
     concern: possible shingles affecting the eye
     flags: [painful blistering rash near the eye, rash on one side of the forehead]
-    reply: "A painful, blistering rash on one side of the forehead or around the eye can be shingles involving the eye, which can damage vision. Antiviral treatment works best when started early, so you should be seen today."
+    replies:
+      - "A painful, blistering rash on one side of the forehead or around the eye can be shingles involving the eye, which can damage vision. Antiviral treatment works best when started early, so you should be seen today."
+      - "A painful rash with blisters on one side of the forehead or near the eye can be shingles affecting the eye, which can harm your vision. Antiviral medicine works best when started early, so please be seen today."
+      - "Blisters on one side of your forehead, around the eye, or on the tip of the nose can mean shingles is involving the eye, and that can threaten your sight. Early antiviral treatment matters, so you should be seen today."
     utterances:
       - "I have a burning, blistery rash on one side of my forehead and my eye is red."
       - "Painful blisters showed up on the tip of my nose and around my left eye."
@@ -226,7 +274,10 @@ scenarios:
     area: skin
     concern: possible skin cancer
     flags: [mole changing in size, shape or color]
-    reply: "A mole that is changing in size, shape, or color, or that bleeds or itches, should be checked because it can be an early sign of skin cancer. It isn't an emergency, but please don't put it off - book a visit within the next week or two."
+    replies:
+      - "A mole that is changing in size, shape, or color, or that bleeds or itches, should be checked because it can be an early sign of skin cancer. It isn't an emergency, but please don't put it off - book a visit within the next week or two."
+      - "Moles that grow, change color, itch, or bleed need to be looked at, since those changes can be an early sign of skin cancer. This isn't an emergency, but it shouldn't wait for months: please book a visit in the next week or two."
+      - "Any mole that grows, changes shape or color, or starts to itch or bleed is worth having checked, because those can be early signs of skin cancer. It's not an emergency, but please book a visit in the next week or two rather than leaving it."
     utterances:
       - "A mole on my back has gotten bigger and darker over the last few months."
       - "I have a spot on my arm with uneven edges that now has two colors."
@@ -238,7 +289,10 @@ scenarios:
     area: belly
     concern: possible bowel condition that needs evaluation
     flags: [blood in stool, change in bowel habits]
-    reply: "Blood in the stool or a lasting change in bowel habits is often from something minor, but it can also be an early sign of bowel disease, including cancer. Please book a primary care visit in the next few days so it can be checked."
+    replies:
+      - "Blood in the stool or a lasting change in bowel habits is often from something minor, but it can also be an early sign of bowel disease, including cancer. Please book a primary care visit in the next few days so it can be checked."
+      - "Blood in your stool or a change in bowel habits that sticks around is usually from something minor, but it can also be an early sign of bowel disease, including cancer. Please book a primary care visit within the next few days to get it checked."
+      - "Seeing blood when you go to the bathroom, or a bowel pattern that has changed and stayed changed, should be checked. Most causes are minor, but some are not, including bowel cancer. Please book a visit with your primary care team in the next few days."
     utterances:
       - "I've noticed bright red blood on the toilet paper for a few weeks now."
       - "My bowel habits changed a month ago and sometimes there's blood mixed in."
@@ -250,7 +304,10 @@ scenarios:
     area: general
     concern: possible uterine condition that needs evaluation
     flags: [vaginal bleeding after menopause]
-    reply: "Any vaginal bleeding after menopause should be evaluated, because it can be an early sign of a problem with the uterus, including cancer. Please book a visit within the next week."
+    replies:
+      - "Any vaginal bleeding after menopause should be evaluated, because it can be an early sign of a problem with the uterus, including cancer. Please book a visit within the next week."
+      - "Vaginal bleeding of any amount after menopause needs to be checked, since it can be an early sign of a uterine problem, including cancer. Please book a visit in the next week."
+      - "After menopause, any bleeding or spotting should be evaluated, even if it is light or happens only once, because it can point to a problem with the uterus, including cancer. Please book an appointment within the next week."
     utterances:
       - "I went through menopause five years ago and I just had some bleeding."
       - "I'm 62 and noticed spotting, even though I haven't had a period in years."
@@ -262,7 +319,10 @@ scenarios:
     area: general
     concern: breast change that needs evaluation
     flags: [new breast lump]
-    reply: "Most breast lumps are not cancer, but any new lump should be examined and may need imaging. Please book a visit this week rather than waiting to see if it goes away."
+    replies:
+      - "Most breast lumps are not cancer, but any new lump should be examined and may need imaging. Please book a visit this week rather than waiting to see if it goes away."
+      - "Most breast lumps turn out not to be cancer, but every new lump should be examined and may need imaging. Please book a visit this week instead of holding off to see if it disappears."
+      - "A new breast lump needs to be checked by a clinician, and sometimes with imaging, even though most lumps are not cancer. Please book a visit this week rather than giving it time to go away on its own."
     utterances:
       - "I found a hard lump in my left breast in the shower."
       - "There's a new lump near my armpit on the breast that wasn't there last month."
@@ -274,7 +334,10 @@ scenarios:
     area: general
     concern: unexplained weight loss that needs evaluation
     flags: [unintentional weight loss, drenching night sweats]
-    reply: "Losing weight without trying, especially with drenching night sweats or ongoing fatigue, should be evaluated because it can be a sign of an underlying illness. Please book a primary care visit in the next few days."
+    replies:
+      - "Losing weight without trying, especially with drenching night sweats or ongoing fatigue, should be evaluated because it can be a sign of an underlying illness. Please book a primary care visit in the next few days."
+      - "Unintended weight loss, especially with soaking night sweats or constant tiredness, should be looked into because it can point to an underlying illness. Please book a primary care visit within the next few days."
+      - "Losing weight when you are not trying to, or waking up drenched in sweat, can be a sign of an illness that needs to be found. Please book a visit with your primary care team in the next few days."
     utterances:
       - "I've lost 15 pounds in two months without trying."
       - "I keep waking up drenched in sweat and my clothes are getting loose."
@@ -286,7 +349,10 @@ scenarios:
     area: general
     concern: possible diabetes
     flags: [excessive thirst, frequent urination]
-    reply: "Being very thirsty and urinating much more than usual can be an early sign of diabetes, which a simple blood test can check. Please book a visit this week. If you also have vomiting, belly pain, or confusion, go to the emergency department."
+    replies:
+      - "Being very thirsty and urinating much more than usual can be an early sign of diabetes, which a simple blood test can check. Please book a visit this week. If you also have vomiting, belly pain, or confusion, go to the emergency department."
+      - "Feeling thirsty all the time and urinating far more than usual can be early signs of diabetes, and a simple blood test can check for it. Please book a visit this week. If you also have vomiting, belly pain, or confusion, go to the emergency department."
+      - "Constant thirst and frequent urination are classic early signs of diabetes, which is easy to check with a blood test. Please book an appointment this week, and go to the emergency department if you start vomiting, have belly pain, or feel confused."
     utterances:
       - "I'm thirsty all the time and peeing every hour."
       - "Lately I can't stop drinking water and I'm up four times a night to urinate."
@@ -299,7 +365,10 @@ scenarios:
     area: eye
     concern: long-standing floaters without change
     flags: []
-    reply: "A few floaters that have looked the same for years, with no flashes and no change in vision, are common and usually harmless. Mention them at your next routine eye exam. If you ever notice a sudden increase, flashes of light, or a shadow in your vision, get seen the same day."
+    replies:
+      - "A few floaters that have looked the same for years, with no flashes and no change in vision, are common and usually harmless. Mention them at your next routine eye exam. If you ever notice a sudden increase, flashes of light, or a shadow in your vision, get seen the same day."
+      - "Floaters that have looked the same for years, with no flashes of light and no change in your vision, are very common and usually harmless. You can bring them up at your next routine eye exam. If you ever see a sudden increase, flashes, or a shadow over your vision, get seen the same day."
+      - "Long-standing floaters that haven't changed are common and usually not serious, especially without flashes or vision loss. Mention them at your next routine eye exam. Get seen the same day if they suddenly increase, or if you notice flashes or a curtain over your vision."
     utterances:
       - "I've had the same couple of floaters for years and they haven't changed. No flashes."
       - "There's one little squiggly floater I've seen since college, nothing new."
@@ -311,7 +380,10 @@ scenarios:
     area: head
     concern: typical tension-type headache
     flags: []
-    reply: "A mild, familiar headache that builds gradually and eases with rest or an over-the-counter pain reliever is usually a tension-type headache. Rest, fluids, and screen breaks often help. If a headache is sudden and severe, or comes with fever, weakness, or vision changes, get care right away."
+    replies:
+      - "A mild, familiar headache that builds gradually and eases with rest or an over-the-counter pain reliever is usually a tension-type headache. Rest, fluids, and screen breaks often help. If a headache is sudden and severe, or comes with fever, weakness, or vision changes, get care right away."
+      - "A mild headache that feels familiar, builds slowly, and improves with rest or an over-the-counter pain reliever is usually a tension-type headache. Rest, water, and breaks from screens tend to help. If a headache is sudden and severe, or comes with fever, weakness, or vision changes, get care right away."
+      - "This sounds like a typical tension-type headache: mild, familiar, and easing with rest or an over-the-counter pain reliever. Fluids, rest, and regular screen breaks usually help. Get care right away for a headache that is sudden and severe, or that comes with fever, weakness, or changes in vision."
     utterances:
       - "I get a dull headache at the end of long workdays, same as I have for years."
       - "Mild band-like headache this afternoon, it usually goes away when I rest."
@@ -323,7 +395,10 @@ scenarios:
     area: general
     concern: likely common cold
     flags: []
-    reply: "A runny nose, sore throat, and mild cough for a couple of days without a high fever is usually a common cold. Rest, fluids, and over-the-counter remedies can help. Book a visit if it lasts more than 10 days, or get care sooner if you have trouble breathing or a high fever."
+    replies:
+      - "A runny nose, sore throat, and mild cough for a couple of days without a high fever is usually a common cold. Rest, fluids, and over-the-counter remedies can help. Book a visit if it lasts more than 10 days, or get care sooner if you have trouble breathing or a high fever."
+      - "A couple of days of runny nose, sore throat, and mild cough with no high fever usually means a common cold. Rest, fluids, and over-the-counter remedies can ease it. Book a visit if it lasts longer than 10 days, and get care sooner if you have trouble breathing or a high fever."
+      - "This sounds like a common cold: congestion, a scratchy throat, and a mild cough without a high fever. Rest, plenty of fluids, and over-the-counter remedies usually help. If it goes on for more than 10 days, book a visit, and get care sooner for trouble breathing or a high fever."
     utterances:
       - "I've had a runny nose and a scratchy throat for two days. No fever."
       - "Stuffy nose and sneezing since yesterday, otherwise I feel okay."
@@ -335,7 +410,10 @@ scenarios:
     area: back
     concern: likely muscle strain
     flags: []
-    reply: "Lower back soreness after lifting or activity, with no numbness, no leg weakness, and normal bladder and bowel control, is usually a muscle strain. Gentle movement, heat, and over-the-counter pain relief help most people. Book a visit if it isn't improving in a couple of weeks."
+    replies:
+      - "Lower back soreness after lifting or activity, with no numbness, no leg weakness, and normal bladder and bowel control, is usually a muscle strain. Gentle movement, heat, and over-the-counter pain relief help most people. Book a visit if it isn't improving in a couple of weeks."
+      - "Soreness in the lower back after lifting or exercise, without numbness, leg weakness, or bladder or bowel changes, is usually a strained muscle. Staying gently active, heat, and over-the-counter pain relief help most people. Book a visit if it isn't getting better within a couple of weeks."
+      - "A sore lower back after activity, with normal sensation, strong legs, and normal bladder and bowel control, is most often a muscle strain. Keep moving gently and try heat or an over-the-counter pain reliever. If it isn't improving after a couple of weeks, book a visit."
     utterances:
       - "My lower back is sore after moving furniture yesterday. No numbness and my legs feel fine."
       - "I tweaked my back gardening, it aches when I bend but no weakness or bladder problems."
@@ -347,7 +425,10 @@ scenarios:
     area: general
     concern: administrative request
     flags: []
-    reply: "You can request a refill from the Medications section of the app, or ask your pharmacy to send the request to your care team. If you're about to run out, let the pharmacy know so they can help bridge the gap."
+    replies:
+      - "You can request a refill from the Medications section of the app, or ask your pharmacy to send the request to your care team. If you're about to run out, let the pharmacy know so they can help bridge the gap."
+      - "You can ask for a refill in the Medications section of the app, or have your pharmacy send the request to your care team. If you're close to running out, tell the pharmacy so they can help cover the gap."
+      - "Refills can be requested from the Medications section of the app, or your pharmacy can send the request to your care team for you. If you're almost out, let the pharmacy know - they can often help until the refill comes through."
     utterances:
       - "How do I get a refill of my blood pressure medication?"
       - "I need to renew my allergy prescription."

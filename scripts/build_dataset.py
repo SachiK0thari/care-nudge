@@ -31,10 +31,22 @@ PUSHBACK = [
     "I'm really busy this week. Can it wait?",
     "I don't want to overreact. Maybe I'll give it a few days?",
 ]
-HOLD = {  # the assistant stays firm when the patient wants to put it off
-    "EMERGENCY": "I understand not wanting to overreact, but this is a situation where waiting can cause permanent harm. Please get emergency care now.",
-    "URGENT": "I understand, and I know it's inconvenient. A delay of even a day or two can change the outcome here, so please be seen today.",
-    "SOON": "I hear you. It isn't an emergency, but it also shouldn't be left for months. Booking a visit this week is the safest plan.",
+HOLD = {  # the assistant stays firm when the patient wants to put it off (one picked at random)
+    "EMERGENCY": [
+        "I understand not wanting to overreact, but this is a situation where waiting can cause permanent harm. Please get emergency care now.",
+        "I know it's hard to act when you're not sure, but with these symptoms waiting can cause lasting harm. Please call 911 or go to the emergency department now.",
+        "I understand, but this isn't something to put off. These symptoms need emergency care right away - please call 911 or go to the emergency department now.",
+    ],
+    "URGENT": [
+        "I understand, and I know it's inconvenient. A delay of even a day or two can change the outcome here, so please be seen today.",
+        "That makes sense, but this is one where timing really matters. Waiting a day or two can make it harder to treat, so please get seen today.",
+        "I know it's a hassle. Even so, this needs to be checked today - a short delay can change how well it can be treated.",
+    ],
+    "SOON": [
+        "I hear you. It isn't an emergency, but it also shouldn't be left for months. Booking a visit this week is the safest plan.",
+        "That's fair - this isn't an emergency. But it also shouldn't be left for months, so please book a visit in the next few days.",
+        "I understand. You don't need to rush in today, but please don't let it slide: booking a visit this week is the safest choice.",
+    ],
 }
 
 
@@ -78,7 +90,7 @@ def conversations(scn: dict, area: dict, core: str, rng: random.Random, n_single
     if scn["level"] in HOLD:
         out.append(("pushback", [
             sys_msg(), user(core), assistant(triage, reply_for(scn, rng)),
-            user(rng.choice(PUSHBACK)), assistant(triage, HOLD[scn["level"]]),
+            user(rng.choice(PUSHBACK)), assistant(triage, rng.choice(HOLD[scn["level"]])),
         ]))
     return out
 

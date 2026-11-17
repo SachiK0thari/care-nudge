@@ -35,7 +35,8 @@ def main() -> None:
     data = load_dataset("json", data_files=files).select_columns(["messages"])
 
     cuda = torch.cuda.is_available()
-    bf16 = cuda and torch.cuda.is_bf16_supported()
+    # is_bf16_supported() returns True on a T4 (emulated), but real bf16 matmuls need compute capability 8.0+ (Ampere).
+    bf16 = cuda and torch.cuda.get_device_capability()[0] >= 8
     quant = None if args.no_4bit else BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
@@ -66,6 +67,8 @@ def main() -> None:
         metric_for_best_model="eval_loss",
         report_to="none",
         seed=13,
+        # Load the non-quantised weights in the same dtype as training, otherwise they default to the config's bf16.
+        model_init_kwargs={"dtype": torch.bfloat16 if bf16 else (torch.float16 if cuda else torch.float32)},
     )
     trainer = SFTTrainer(
         model=args.base_model,
