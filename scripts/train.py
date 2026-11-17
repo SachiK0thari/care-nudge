@@ -78,6 +78,14 @@ def main() -> None:
         peft_config=lora,
         quantization_config=quant,
     )
+    if cuda and not bf16:
+        # TRL casts every trainable LoRA weight of a quantized model to bf16, whatever precision was asked for.
+        # fp16 training (T4) uses a gradient scaler that cannot unscale bf16 gradients, so the first optimizer step
+        # crashes. Keep the adapter weights in fp32 instead: fp16 compute + fp32 master weights is standard QLoRA.
+        # The optimizer is only created inside train(), so it picks up these fp32 tensors.
+        for param in trainer.model.parameters():
+            if param.requires_grad:
+                param.data = param.data.float()
     trainer.train()
     trainer.save_model(args.output_dir)                      # adapter weights only (a few MB)
     trainer.processing_class.save_pretrained(args.output_dir)  # tokenizer + chat template
