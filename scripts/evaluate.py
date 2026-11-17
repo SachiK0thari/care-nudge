@@ -17,6 +17,8 @@ import json
 import sys
 from pathlib import Path
 
+from tqdm.auto import tqdm
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -70,7 +72,7 @@ def main() -> None:
     by_system: dict[str, list[tuple[str, str]]] = {"rules": [], "model": [], "model+rules": []}
     shots = few_shot_block(ROOT / "data" / "train.jsonl") if args.few_shot else ""
     bad_format, misses, outputs = 0, [], []
-    for row in rows:
+    for row in tqdm(rows, desc=args.name, disable=not has_model):
         gold = row["level"]
         rule_level = "NEEDS_INFO"  # urgency ratchets across every patient turn, as in the app
         for m in row["messages"]:

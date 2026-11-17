@@ -30,8 +30,12 @@ def load(model_id: str | None = None, adapter_id: str | None = None) -> bool:
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     on_gpu = torch.cuda.is_available() or bool(os.getenv("SPACES_ZERO_GPU"))
+    # bf16 is only native on compute capability 8.0+; a T4 (7.5) emulates it and generates many times slower.
+    # ZeroGPU hardware is bf16-capable but hides CUDA at load time, so that case stays bf16.
+    old_gpu = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] < 8
+    dtype = torch.float16 if old_gpu else torch.bfloat16 if on_gpu else torch.float32
     _tok = AutoTokenizer.from_pretrained(adapter_id or model_id)
-    _model = AutoModelForCausalLM.from_pretrained(model_id, dtype=torch.bfloat16 if on_gpu else torch.float32)
+    _model = AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype)
     if adapter_id:
         from peft import PeftModel
         _model = PeftModel.from_pretrained(_model, adapter_id)
