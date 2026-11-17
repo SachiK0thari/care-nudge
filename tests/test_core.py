@@ -54,6 +54,18 @@ def test_model_can_escalate_beyond_rules():
     assert triage.level == "URGENT" and visible == "Be seen today."
 
 
+def test_flags_are_not_listed_twice_when_rules_agree_or_win():
+    text = "I keep seeing white flashes in front of my right eye."
+    tag = '<triage>{{"level": "{}", "red_flags": ["new flashes of light", "sudden increase in floaters"], "concern": "x"}}</triage>\nBe seen.'
+    for level in ("SOON", "URGENT"):  # the rules win, then tie
+        triage, visible = policy.decide(text, tag.format(level))
+        assert triage.red_flags == ["new flashes or floaters"]
+        assert "floaters," not in visible
+    # The model is more urgent: keep what it noticed alongside the rules.
+    triage, _ = policy.decide(text, tag.format("EMERGENCY"))
+    assert triage.red_flags == ["new flashes of light", "sudden increase in floaters", "new flashes or floaters"]
+
+
 def test_fallback_holds_the_line_when_patient_wants_to_wait():
     _, visible = policy.decide("It's probably nothing. Can I just wait and see?", "", prior_level="URGENT")
     assert "today" in visible

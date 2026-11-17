@@ -51,7 +51,14 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     model = parsed or Triage()
     rule_wins = RANK[rule.level] > RANK[model.level]
     level = more_urgent(model.level, rule.level)
-    flags = list(dict.fromkeys(model.red_flags + rule.red_flags))
+    if rule.red_flags and RANK[rule.level] >= RANK[model.level]:
+        # The rules matched the patient's own words. The model's names for the same signs
+        # only repeat them, and can include signs the patient never mentioned.
+        flags = list(rule.red_flags)
+    else:
+        flags = list(dict.fromkeys(model.red_flags + rule.red_flags))
+    if SELF_HARM in model.red_flags and SELF_HARM not in flags:
+        flags.append(SELF_HARM)
     concern = rule.concern if rule_wins else (model.concern or rule.concern)
     if SELF_HARM in flags and (rule_wins or not visible):
         visible = CRISIS_REPLY
