@@ -5,7 +5,8 @@
 Each scenario's first 3 phrasings feed training; the last 2 are held out for
 the test split, so test measures generalisation to unseen wording. Also writes
 data/probes.jsonl (informational questions, never trained on) and prints a short
-audit of the training split.
+audit of the training split. The separate `info_questions` in the catalog (different
+topics from the probes) go to training only, so test and probes stay unchanged.
 """
 from __future__ import annotations
 
@@ -31,6 +32,8 @@ PUSHBACK = [
     "I'm really busy this week. Can it wait?",
     "I don't want to overreact. Maybe I'll give it a few days?",
 ]
+INFO_PREFIX = ["", "Hi. ", "Quick question. ", "Just curious. ", "I was reading about this. "]
+INFO_TRIAGE = {"level": "ROUTINE", "flags": [], "concern": "general health question"}
 HOLD = {  # the assistant stays firm when the patient wants to put it off (one picked at random)
     "EMERGENCY": [
         "I understand not wanting to overreact, but this is a situation where waiting can cause permanent harm. Please get emergency care now.",
@@ -95,6 +98,23 @@ def conversations(scn: dict, area: dict, core: str, rng: random.Random, n_single
     return out
 
 
+def info_rows(spec: dict, rng: random.Random) -> list[dict]:
+    """Training rows for questions ABOUT a warning sign: answered as ROUTINE, unless the item is a
+    contrast case (`like:` a scenario) where the person has the symptom now and keeps that level."""
+    by_id = {s["id"]: s for s in spec["scenarios"]}
+    rows = []
+    for item in spec.get("info_questions", []):
+        base = by_id[item["like"]] if "like" in item else INFO_TRIAGE
+        triage = Triage(base["level"], list(base["flags"]), base["concern"])
+        for q in item["questions"]:
+            for prefix in rng.sample(INFO_PREFIX, 2):
+                reply = item.get("reply") or reply_for(base, rng)
+                rows.append({"scenario": "info_contrast" if "like" in item else "info_question",
+                             "level": triage.level, "shape": "info",
+                             "messages": [sys_msg(), user(prefix + q), assistant(triage, reply)]})
+    return rows
+
+
 def audit(train: list[dict]) -> None:
     """Look at the data before training on it: class balance and how often replies repeat."""
     def body(row: dict) -> str:  # final reply without the tag line or the opener
@@ -120,6 +140,7 @@ def main() -> None:
                     test.append({**row, "messages": messages[:-1]})
                 else:
                     train.append({**row, "messages": messages})
+    train += info_rows(spec, rng)  # after the loop, so the test split's random draws are unchanged
     rng.shuffle(train)
     n_val = max(1, len(train) // 10)
     # informational questions (nobody is reporting a symptom): a probe set, never trained on

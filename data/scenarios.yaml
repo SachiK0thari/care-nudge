@@ -452,3 +452,84 @@ info_probes:
   - "What does a heart attack feel like - is it always chest pain?"
   - "At what age should I start colon cancer screening?"
   - "What is the difference between a cold and the flu?"
+
+# Informational questions that ARE trained on, so the assistant learns to answer a
+# question ABOUT a warning sign without treating the asker as having it. Topics are
+# kept apart from info_probes above (no stroke, heart attack, diabetes, ibuprofen,
+# vaccines, pneumonia, cholesterol, floaters, headaches, moles, colon screening, colds/flu),
+# so the probe score still measures generalisation. Default: ROUTINE, no red flags.
+# Items with `like: <scenario id>` are contrast cases: the person asks the question but
+# is having the symptom now, so they take that scenario's level, flags and replies.
+info_questions:
+  - questions: ["What are the signs of a severe allergic reaction?", "How do you recognize anaphylaxis?"]
+    reply: "A severe allergic reaction usually starts within minutes of a trigger like food, a sting, or a medicine. Signs include swelling of the lips, tongue, or throat, trouble breathing, widespread hives, and feeling faint. If you or someone with you has these signs right now, use an epinephrine auto-injector if there is one and call 911."
+  - questions: ["What are the symptoms of a blood clot in the lung?", "How would someone know they have a pulmonary embolism?"]
+    reply: "A blood clot in the lung typically causes sudden shortness of breath, sharp chest pain that is worse when breathing in, and sometimes a fast heartbeat or coughing up blood. It is more likely after surgery, long travel, or a period of bed rest. If someone has these symptoms right now, call 911."
+  - questions: ["What does a retinal detachment look like?", "What are the warning signs of a detached retina?"]
+    reply: "A detached retina often starts with a sudden shower of new floaters or flashes of light, followed by a shadow or curtain moving across part of the vision. It is painless, which is why people sometimes wait. If this is happening to you now, go to the emergency department or an eye emergency service today."
+  - questions: ["How can you tell if a headache is dangerous?", "Which kinds of headaches need emergency care?"]
+    reply: "Most headaches are not dangerous. The ones that need emergency care come on suddenly and severely, feel like the worst ever, or come with fever and a stiff neck, confusion, weakness, or trouble speaking. If you have a headache like that right now, call 911."
+  - questions: ["What are the warning signs of internal bleeding in the stomach?", "How does a bleeding ulcer usually show up?"]
+    reply: "Bleeding in the stomach or intestines can show up as vomiting blood or material that looks like coffee grounds, or as black, tarry stools. Some people also feel dizzy or weak. If someone has these signs right now, they need emergency care - call 911 or go to the emergency department."
+  - questions: ["Which back pain symptoms are red flags?", "When is back pain more than a pulled muscle?"]
+    reply: "Most back pain is muscular and settles in a few weeks. Red flags are numbness in the groin or inner thighs, new trouble controlling the bladder or bowels, or new weakness in the legs. Anyone with those signs right now should go to the emergency department."
+  - questions: ["What temperature counts as a fever in a newborn?", "Why is fever in young babies treated differently?"]
+    reply: "In a baby under 3 months, a temperature of 100.4°F (38°C) or higher taken rectally counts as a fever. Young babies can't fight infections as well, so a fever at that age needs to be checked by a doctor right away, even if the baby seems fine. For older children, how the child is acting matters more than the number."
+  - questions: ["Why do some people see flashes of light in their eyes?", "Are flashes in your vision ever serious?"]
+    reply: "Flashes of light usually happen when the gel inside the eye tugs on the retina, which becomes more common with age. Most of the time it is harmless, but new flashes, especially with a sudden burst of floaters, can mean a retinal tear. If that is happening to you now, get your eyes checked today."
+  - questions: ["How can you tell if leg swelling is a blood clot?", "What are the signs of a DVT?"]
+    reply: "A blood clot in the leg usually causes swelling in one leg only, with calf pain, warmth, or redness. Swelling in both legs is more often from things like heat, standing, or medicines. If someone has one-sided swelling like that now, they should be seen today."
+  - questions: ["Is sudden hearing loss an emergency?", "What should someone do if they lose hearing in one ear?"]
+    reply: "Sudden hearing loss in one ear, especially over hours or overnight, should be checked within a day because early treatment can improve recovery. Gradual hearing loss or a blocked feeling from a cold is usually less urgent. If this has just happened to you, try to be seen today."
+  - questions: ["How is a kidney infection different from a bladder infection?", "What are the symptoms of a kidney infection?"]
+    reply: "A bladder infection causes burning, urgency, and needing to pee often. A kidney infection adds fever, chills, and pain in the side or back, and can make you feel quite unwell. If you have those symptoms now, you should be seen today."
+  - questions: ["What does cellulitis look like?", "How do you know if a cut is getting infected?"]
+    reply: "An infected wound or cellulitis usually looks red, warm, swollen, and tender, and the redness may spread over hours or days. Red streaks or fever are signs it is getting worse. If you are seeing spreading redness right now, get seen today."
+  - questions: ["Can shingles affect the eyes?", "Why is shingles near the eye a concern?"]
+    reply: "Yes. When shingles involves the forehead, nose, or the area around the eye, it can affect the eye itself and threaten vision. That is why a blistering rash on one side of the face near the eye should be checked the same day."
+  - questions: ["What are the early signs of sepsis?", "How do you recognize sepsis?"]
+    reply: "Sepsis is the body's extreme response to an infection. Early signs include fever or feeling very cold, a fast heartbeat, fast breathing, confusion, and feeling more unwell than ever before. If someone with an infection has these signs right now, call 911 or go to the emergency department."
+  - questions: ["What are the symptoms of meningitis?", "How can you tell meningitis from the flu?"]
+    reply: "Meningitis often starts like the flu but adds a severe headache, stiff neck, sensitivity to light, and sometimes a rash or confusion. It can get worse within hours. If someone has these symptoms now, they need emergency care."
+  - questions: ["What are the signs of appendicitis?", "Where does appendicitis pain usually start?"]
+    reply: "Appendicitis pain often starts around the belly button and moves to the lower right side over several hours, getting worse with movement or coughing. It may come with loss of appetite, nausea, and a low fever. Pain like that should be checked the same day."
+  - questions: ["What is the difference between heat exhaustion and heat stroke?", "What are the signs of heat stroke?"]
+    reply: "Heat exhaustion causes heavy sweating, weakness, and dizziness, and usually improves with rest, shade, and fluids. Heat stroke is more serious: a very high body temperature, confusion, and sometimes no sweating. Heat stroke is an emergency - call 911 and cool the person down while you wait."
+  - questions: ["What are the signs of a concussion?", "How do you know if a head injury is serious?"]
+    reply: "Common concussion signs include headache, dizziness, confusion, and feeling foggy or slowed down after a blow to the head. Warning signs that need emergency care are repeated vomiting, worsening headache, unusual drowsiness, seizures, or one pupil larger than the other. Mild symptoms should still be checked by a doctor."
+  - questions: ["What are the symptoms of low blood sugar?", "How do you know if blood sugar is too low?"]
+    reply: "Low blood sugar can cause shakiness, sweating, hunger, a fast heartbeat, irritability, and confusion. For people with diabetes, fast-acting sugar like juice or glucose tablets usually helps within 15 minutes. If someone is confused, can't eat or drink, or passes out, call 911."
+  - questions: ["When should someone go to the hospital for an asthma attack?", "How do you know if an asthma attack is serious?"]
+    reply: "An asthma attack is serious when a rescue inhaler isn't helping, the person is too breathless to speak in full sentences, or their lips or fingertips turn bluish. Those signs mean they should call 911. Milder attacks that respond to the inhaler should still be followed up with the care team."
+  - questions: ["What are the symptoms of carbon monoxide poisoning?", "How would I know if there's carbon monoxide in my home?"]
+    reply: "Carbon monoxide poisoning causes headache, dizziness, nausea, and confusion, often in several people or pets in the same place at once. A carbon monoxide alarm is the only reliable way to detect it at home. If you suspect it right now, get everyone outside into fresh air and call 911."
+  - questions: ["What is a normal blood pressure?", "What do the two numbers in a blood pressure reading mean?"]
+    reply: "The top number is the pressure when the heart beats and the bottom number is the pressure between beats. A reading below 120/80 is generally considered normal. Your care team can tell you what target makes sense for you."
+  - questions: ["How much sleep do adults need?", "Is six hours of sleep enough?"]
+    reply: "Most adults need about 7 to 9 hours of sleep a night. Regularly getting less can affect mood, focus, and long-term health. If you often struggle to sleep or wake up tired, it's worth bringing up at a routine visit."
+  - questions: ["What is a normal resting heart rate?", "Is a resting heart rate of 55 normal?"]
+    reply: "A normal resting heart rate for adults is usually between 60 and 100 beats per minute, and fit people often run lower, sometimes in the 50s. What matters most is how you feel. You can ask about your own numbers at your next routine visit."
+  - questions: ["What's the difference between a sprain and a strain?", "How should a minor sprain be treated?"]
+    reply: "A sprain is an injury to a ligament, usually at a joint like the ankle, while a strain affects a muscle or tendon. Most minor ones improve with rest, ice, gentle compression, and elevation. Book a visit if you can't bear weight or it isn't improving after a week or two."
+  - questions: ["How much water should I drink a day?", "Does coffee count toward daily fluids?"]
+    reply: "Needs vary with size, activity, and weather, but many adults do well with roughly 8 cups of fluid a day, and coffee and tea do count. Pale yellow urine is a simple sign you're drinking enough. If you have a heart or kidney condition, ask your care team what amount is right for you."
+  - questions: ["How can I cut down on salt?", "Which foods have the most hidden sodium?"]
+    reply: "Most sodium comes from packaged and restaurant foods rather than the salt shaker: bread, deli meats, soups, sauces, and snacks are common sources. Cooking at home and checking labels for sodium per serving makes a big difference. Your care team can help if you've been asked to follow a low-salt diet."
+  - questions: ["Why do I need vitamin D?", "How do people usually get enough vitamin D?"]
+    reply: "Vitamin D helps the body absorb calcium and keep bones strong. People get it from sunlight, foods like fatty fish and fortified milk, and supplements. If you're unsure whether you're getting enough, you can ask about a blood test at a routine visit."
+  # contrast cases: same kind of question, but the person has the symptom now
+  - like: anaphylaxis
+    questions: ["What are the signs of a severe allergic reaction? My lips are swelling and my throat feels tight after a bee sting.", "Is this anaphylaxis? I ate shrimp ten minutes ago and now I have hives and it's hard to breathe."]
+  - like: pulmonary_embolism
+    questions: ["How do you know if it's a blood clot in the lung? I suddenly can't catch my breath and I had knee surgery last week.", "Can a clot cause sharp chest pain when breathing? That's what I have right now, after a long flight."]
+  - like: vision_loss
+    questions: ["What does a detached retina look like? A dark shadow is coming down over my left eye right now.", "Is it serious if part of your vision goes black? Half of my right eye just went dark."]
+  - like: retinal_flashes
+    questions: ["Are flashes of light in one eye serious? I've been seeing them since this morning, with lots of new floaters.",
+                # the motivating story: white flashes in one eye that the patient kept putting off
+                "Is it a big deal to see white flashes in one eye? I've had them for a few days and kept putting off calling anyone.",
+                "Do white flashes in one eye usually go away by themselves? They started last week and I was hoping to wait it out."]
+  - like: dvt
+    questions: ["How can you tell if leg swelling is a clot? My left calf is swollen, warm and sore since yesterday.", "Is one swollen leg a sign of DVT? My right leg is much bigger than the left and it hurts."]
+  - like: thunderclap_headache
+    questions: ["Which headaches need emergency care? Mine came on in seconds and it's the worst I've ever had.", "Is a sudden explosive headache dangerous? I got one a few minutes ago."]
