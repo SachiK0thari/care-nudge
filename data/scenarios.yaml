@@ -63,9 +63,9 @@ scenarios:
     concern: possible bleeding in the brain
     flags: [sudden severe headache, worst headache of life]
     replies:
-      - "A headache that hits suddenly and is the worst of your life can be a sign of bleeding in the brain. This needs emergency evaluation right away. Please call 911 or have someone take you to the emergency department now."
-      - "A sudden, severe headache that is the worst you've ever had can be caused by bleeding in the brain. It needs emergency care immediately. Call 911 now, or have someone drive you to the emergency department."
-      - "When a headache comes on in seconds and is the worst of your life, bleeding in the brain has to be ruled out right away. Please call 911 or get someone to take you to the emergency department now - don't wait for it to ease."
+      - "A headache that hits suddenly and is the worst of your life can be a sign of bleeding in the brain. This needs emergency evaluation right away. Please call 911 now, and do not drive yourself."
+      - "A sudden, severe headache that is the worst you've ever had can be caused by bleeding in the brain. It needs emergency care immediately. Call 911 now rather than driving yourself or having someone drive you."
+      - "When a headache comes on in seconds and is the worst of your life, bleeding in the brain has to be ruled out right away. Please call 911 now - don't wait for it to ease, and don't drive yourself."
     utterances:
       - "Out of nowhere I got the worst headache of my life, like being hit with a hammer."
       - "A sudden explosive headache started a few minutes ago and it's unbearable."
