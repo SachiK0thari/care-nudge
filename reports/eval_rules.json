@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "n": 260,
+    "accuracy": 0.6538461538461539,
+    "under_triage": 0.19230769230769232,
+    "over_triage": 0.0,
+    "emergency_recall": 0.85,
+    "urgent_plus_recall": 0.84375
+  }
+}

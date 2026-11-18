@@ -3,10 +3,21 @@ miscellaneous/
 .venv/
 __pycache__/
 outputs/
-reports/
+reports/*
+# the reports behind the README results table
+!reports/eval_rules.json
+!reports/eval_base.json
+!reports/eval_base_fewshot.json
+!reports/eval_finetuned.json
+!reports/eval_finetuned_probes.json
+!reports/outputs_finetuned.jsonl
+!reports/outputs_finetuned_probes.jsonl
 data/*.jsonl
 .env
 
 # global gitignore ignores *.txt; the Space needs these
 !requirements.txt
 !requirements-dev.txt
+
+# demo recording
+!assets/

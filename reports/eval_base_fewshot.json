@@ -1,0 +1,77 @@
+{
+  "rules": {
+    "n": 260,
+    "accuracy": 0.6538461538461539,
+    "under_triage": 0.19230769230769232,
+    "over_triage": 0.0,
+    "emergency_recall": 0.85,
+    "urgent_plus_recall": 0.84375
+  },
+  "model": {
+    "n": 260,
+    "accuracy": 0.6961538461538461,
+    "under_triage": 0.17307692307692307,
+    "over_triage": 0.13076923076923078,
+    "emergency_recall": 0.57,
+    "urgent_plus_recall": 0.98125,
+    "format_ok": 0.9884615384615385
+  },
+  "model+rules": {
+    "n": 260,
+    "accuracy": 0.8384615384615385,
+    "under_triage": 0.03076923076923077,
+    "over_triage": 0.13076923076923078,
+    "emergency_recall": 0.93,
+    "urgent_plus_recall": 1.0
+  },
+  "under_triaged_examples": [
+    {
+      "scenario": "gi_bleed",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Not sure if this matters, but there was a lot of dark red blood when I vomited this morning. Is this normal?"
+    },
+    {
+      "scenario": "gi_bleed",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Quick question. There was a lot of dark red blood when I vomited this morning."
+    },
+    {
+      "scenario": "gi_bleed",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Hi, There was a lot of dark red blood when I vomited this morning. It's probably nothing, right?"
+    },
+    {
+      "scenario": "gi_bleed",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "There was a lot of dark red blood when I vomited this morning."
+    },
+    {
+      "scenario": "cauda_equina",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Sorry to bother you. I can't feel myself wiping and my back is killing me. What should I do?"
+    },
+    {
+      "scenario": "cauda_equina",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Quick question. I can't feel myself wiping and my back is killing me. Should I be worried?"
+    },
+    {
+      "scenario": "cauda_equina",
+      "gold": "EMERGENCY",
+      "predicted": "URGENT",
+      "text": "Sorry to bother you. I can't feel myself wiping and my back is killing me. It's probably nothing, right?"
+    },
+    {
+      "scenario": "postmenopausal_bleeding",
+      "gold": "SOON",
+      "predicted": "NEEDS_INFO",
+      "text": "My periods stopped at 51 and now, three years later, I'm bleeding lightly."
+    }
+  ]
+}

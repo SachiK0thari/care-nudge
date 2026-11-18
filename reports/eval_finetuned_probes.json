@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "n": 12,
+    "accuracy": 0.0,
+    "under_triage": 0.0,
+    "over_triage": 0.08333333333333333,
+    "emergency_recall": 0.0,
+    "urgent_plus_recall": 0.0
+  },
+  "model": {
+    "n": 12,
+    "accuracy": 1.0,
+    "under_triage": 0.0,
+    "over_triage": 0.0,
+    "emergency_recall": 0.0,
+    "urgent_plus_recall": 0.0,
+    "format_ok": 1.0
+  },
+  "model+rules": {
+    "n": 12,
+    "accuracy": 0.9166666666666666,
+    "under_triage": 0.0,
+    "over_triage": 0.08333333333333333,
+    "emergency_recall": 0.0,
+    "urgent_plus_recall": 0.0
+  },
+  "under_triaged_examples": []
+}

@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The light setup: no PyTorch. Enough for the tests, the dataset build and the rules-only evaluation.
+      - run: pip install pyyaml pytest tqdm
+      - run: pytest -q
+      - name: Build the dataset
+        run: python scripts/build_dataset.py
+      - name: Rules-only evaluation (fails if emergency recall drops)
+        run: |
+          python scripts/evaluate.py
+          python - <<'PY'
+          import json
+          r = json.load(open("reports/eval_rules.json"))["rules"]
+          print(r)
+          assert r["emergency_recall"] >= 0.85, "rule-layer emergency recall dropped"
+          assert r["over_triage"] == 0.0, "rules over-triaged a test message"
+          PY
+      - name: Gold replies pass the reply checks
+        run: python scripts/check_replies.py data/val.jsonl
