@@ -1,6 +1,7 @@
 """Turn (model output + rule hits) into one decision and one next step."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -32,6 +33,18 @@ STILL = {
     "EMERGENCY": "What you described earlier still needs emergency care now. Please call 911 or go to the emergency department.",
     "URGENT": "What you described earlier still needs to be seen today, even if it feels minor. A short delay can change the outcome.",
     "SOON": "What you described earlier should still be checked within the next few days. I'll help you book before we finish.",
+}
+# The action a reply must name at each level. A more urgent instruction also counts.
+ACTION = {
+    "EMERGENCY": re.compile(r"\b(911|988|emergency)\b", re.I),
+    "URGENT": re.compile(r"\b(today|same[- ]day|911|emergency)\b", re.I),
+    "SOON": re.compile(r"\b(book\w*|visit|appointment|today|same[- ]day|911|emergency)\b", re.I),
+}
+# Appended when the model's reply holds the level but leaves out what to do (seen on pushback turns).
+NEXT_STEP = {
+    "EMERGENCY": "Please call 911 or go to the nearest emergency department now.",
+    "URGENT": "Please arrange to be seen today.",
+    "SOON": "Please book a primary care visit in the next few days.",
 }
 CRISIS_BANNER = "### Call or text 988 now (Suicide & Crisis Lifeline)\nIf you are in immediate danger, call 911."
 
@@ -67,7 +80,14 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     elif rule_wins or not visible:
         # Never show reassuring model text next to a rule-level escalation.
         visible = SAFE_REPLY[level].format(flags=", ".join(flags) or "your symptoms")
-    return Triage(level, flags, concern), visible
+    return Triage(level, flags, concern), ensure_action(level, visible)
+
+
+def ensure_action(level: str, visible: str) -> str:
+    """Every reply to a warning sign must say what to do next, whatever the model wrote."""
+    if level in ACTION and not ACTION[level].search(visible):
+        return f"{visible} {NEXT_STEP[level]}".strip()
+    return visible
 
 
 def update(session: Session, user_text: str, triage: Triage, visible: str) -> Session:

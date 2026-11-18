@@ -88,3 +88,11 @@ def test_next_step_by_level():
     soon = policy.Session(level="SOON", red_flags=["changing mole"])
     assert policy.next_step(soon, sched, final=False, now=noon)[1] == []  # waits for wrap-up
     assert len(policy.next_step(soon, sched, final=True, now=noon)[1]) == 3
+
+
+def test_reply_that_holds_the_level_still_names_the_next_step():
+    raw = '<triage>{"level": "EMERGENCY", "red_flags": [], "concern": "x"}</triage>\nI know it\'s inconvenient, but this isn\'t something to put off.'
+    _, visible = policy.decide("I'm really busy this week. Can it wait?", raw, prior_level="EMERGENCY")
+    assert visible.startswith("I know it's inconvenient") and "911" in visible
+    assert policy.ensure_action("URGENT", "Please be seen today.") == "Please be seen today."  # nothing added
+    assert policy.ensure_action("ROUTINE", "Rest and fluids.") == "Rest and fluids."
