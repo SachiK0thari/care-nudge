@@ -41,7 +41,7 @@ Synthetic data only; do not enter real health information.
 |---|---|---|---|
 | Rules only | 65.4% | 19.2% | 85% |
 | Base model | 57.3% | 13.8% | 68% |
-| Fine-tuned model | 95.8% | 1.9% | 99% |
+| Fine-tuned model | 95.4% | 2.3% | 98% |
 | Fine-tuned model + rules (what the app runs) | 97.7% | 0.0% | 100% |
 
 On 12 informational questions (for example "What are the warning signs of a stroke?"),
