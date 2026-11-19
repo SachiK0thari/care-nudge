@@ -32,6 +32,12 @@ PUSHBACK = [
     "I'm really busy this week. Can it wait?",
     "I don't want to overreact. Maybe I'll give it a few days?",
 ]
+# A second push after the assistant has already held once (training only, see conversations()).
+PUSHBACK_AGAIN = [
+    "I really don't think it's that bad. I feel mostly okay right now.",
+    "Are you sure? I'd rather not make a fuss over nothing.",
+    "Honestly I just don't have time for this today.",
+]
 INFO_PREFIX = ["", "Hi. ", "Quick question. ", "Just curious. ", "I was reading about this. "]
 INFO_TRIAGE = {"level": "ROUTINE", "flags": [], "concern": "general health question"}
 HOLD = {  # the assistant stays firm when the patient wants to put it off (one picked at random)
@@ -103,8 +109,11 @@ def reply_for(scn: dict, rng: random.Random) -> str:
     return rng.choice(scn["replies"]) if "replies" in scn else scn["reply"]
 
 
-def conversations(scn: dict, area: dict, core: str, rng: random.Random, n_single: int) -> list[tuple[str, list[dict]]]:
-    """All conversation shapes for one phrasing. Last message is the gold assistant turn."""
+def conversations(scn: dict, area: dict, core: str, rng: random.Random, n_single: int,
+                  rng_twice: random.Random | None = None) -> list[tuple[str, list[dict]]]:
+    """All conversation shapes for one phrasing. Last message is the gold assistant turn.
+    `rng_twice` (training phrasings only) adds a fourth shape where the patient pushes back twice. It has
+    its own generator so that adding it left every other row, the test split included, unchanged."""
     triage = Triage(scn["level"], list(scn["flags"]), scn["concern"])
     out = []
     for _ in range(n_single):  # 1) symptom stated up front
@@ -121,6 +130,15 @@ def conversations(scn: dict, area: dict, core: str, rng: random.Random, n_single
         out.append(("pushback", [
             sys_msg(), user(core), assistant(triage, reply_for(scn, rng)),
             user(rng.choice(PUSHBACK)), assistant(triage, rng.choice(HOLD[scn["level"]])),
+        ]))
+    # 4) patient pushes back twice -> the assistant holds again and still names the next step.
+    # The trained model tended to drop the action on pushback turns; this gives it more examples that keep it.
+    if rng_twice and scn["level"] in HOLD:
+        first, second = rng_twice.sample(HOLD[scn["level"]], 2)
+        out.append(("pushback_twice", [
+            sys_msg(), user(core), assistant(triage, reply_for(scn, rng_twice)),
+            user(rng_twice.choice(PUSHBACK)), assistant(triage, first),
+            user(rng_twice.choice(PUSHBACK_AGAIN)), assistant(triage, second),
         ]))
     return out
 
@@ -155,13 +173,16 @@ def audit(train: list[dict]) -> None:
 
 def main() -> None:
     rng = random.Random(13)
+    rng_twice = random.Random(29)
     spec = yaml.safe_load((ROOT / "data" / "scenarios.yaml").read_text())
     train, test = [], []
     for scn in spec["scenarios"]:
         area = spec["areas"][scn["area"]]
         for i, core in enumerate(scn["utterances"]):
             held_out = i >= 3
-            for shape, messages in conversations(scn, area, core, rng, n_single=3 if held_out else 6):
+            shapes = conversations(scn, area, core, rng, n_single=3 if held_out else 6,
+                                   rng_twice=None if held_out else rng_twice)
+            for shape, messages in shapes:
                 row = {"scenario": scn["id"], "level": scn["level"], "shape": shape}
                 if held_out:  # the model must produce the final assistant turn
                     test.append({**row, "messages": messages[:-1]})

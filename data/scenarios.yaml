@@ -436,6 +436,107 @@ scenarios:
       - "My thyroid pills are almost out, how do I order more?"
       - "Where do I go to renew a prescription?"
 
+  # ------------- added 2026-11-19: situations the first 27 didn't cover -------------
+  # Kept at the end so the earlier scenarios' random draws, and so their test rows, don't change.
+  # `added` lets CI keep its rules-only recall gate on the original 27 (the rules don't cover these).
+  # Written fresh: none of these copies or paraphrases a message in data/challenge.yaml.
+  - id: collapse_unresponsive
+    added: 2026-11-19
+    level: EMERGENCY
+    area: general
+    concern: possible loss of consciousness
+    flags: [collapsed or unresponsive]
+    replies:
+      - "Someone who has collapsed and won't respond needs emergency help right now. Call 911 and put the phone on speaker. Check whether they are breathing normally - if they aren't, start CPR by pushing hard and fast in the center of the chest, and the dispatcher will guide you."
+      - "This is an emergency. Please call 911 now. While you wait, check if they are breathing normally. If they are not, begin CPR - push hard and fast in the middle of the chest - and follow the dispatcher's instructions. Do not try to drive them to the hospital yourself."
+      - "When a person collapses and doesn't respond, every minute matters. Call 911 right away and stay with them. If they aren't breathing normally, start chest compressions in the center of the chest; the 911 dispatcher can talk you through it."
+    utterances:
+      - "My mom just fell over in the kitchen and she isn't answering me when I say her name."
+      - "My roommate is on the floor and I can't get him to wake up, he's making weird snoring sounds."
+      - "My grandpa slumped over at the dinner table and he's not reacting when I shake his shoulder."
+      - "My wife went down in the bathroom and she's not opening her eyes or talking."
+      - "I came home and found my brother on the couch and I can't wake him, he's barely moving."
+  - id: overdose
+    added: 2026-11-19
+    level: EMERGENCY
+    area: general
+    concern: possible overdose or poisoning
+    flags: [possible overdose or poisoning]
+    replies:
+      - "Taking too much of a medicine can be dangerous even if you feel fine right now - some do their damage hours later. Please call 911 or Poison Control (1-800-222-1222) now, and keep the bottle nearby so you can tell them what was taken and how much. If any of this was on purpose, you can also call or text 988."
+      - "This needs emergency advice right now, even if nothing feels wrong yet. Call 911 or Poison Control at 1-800-222-1222 and have the medicine bottle with you. Don't wait for symptoms, and don't drive yourself if you start to feel drowsy or confused. If you took it on purpose or are thinking about hurting yourself, you can also call or text 988."
+      - "Too much of a medicine can cause serious harm before any symptoms show up. Please call Poison Control (1-800-222-1222) or 911 now and tell them exactly what was taken, how much, and when. If you're struggling and this wasn't an accident, you can also call or text 988 to talk with someone."
+    utterances:
+      - "I swallowed a big handful of my sleeping pills about an hour ago."
+      - "My toddler got into my purse and I think she ate some of my blood pressure pills."
+      - "I've taken way more of my pain medication than I'm supposed to today, I kept taking more."
+      - "My teenager drank most of a bottle of cough syrup and now he's acting really strange."
+      - "I lost count and I think I took a lot more of my heart pills than I should have."
+  - id: seizure
+    added: 2026-11-19
+    level: EMERGENCY
+    area: general
+    concern: possible prolonged or first-time seizure
+    flags: [seizure that is long, repeated, or a first one]
+    replies:
+      - "A seizure that lasts more than five minutes, keeps coming back, or is someone's first ever needs emergency care. Call 911 now. Move hard objects away, turn them gently onto their side, and don't put anything in their mouth. Note the time it started."
+      - "Please call 911 right away. While you wait, keep them safe: clear the area around them, cushion their head, roll them onto their side, and never put anything in their mouth. Tell the dispatcher how long the seizure has lasted."
+      - "This needs emergency care. Call 911 now. Stay with them, keep them from hitting anything, and turn them on their side once the shaking eases. Don't hold them down or put anything in their mouth, and keep track of how long it lasts."
+    utterances:
+      - "My friend is shaking all over on the floor and it's been going on for a few minutes now."
+      - "My daughter just had a seizure for the first time ever, she's never had one before."
+      - "My dad has epilepsy but this seizure won't stop, it's been longer than five minutes."
+      - "My girlfriend's whole body started twitching hard and she's not answering me, it hasn't stopped."
+      - "My son had a seizure that stopped, and now he's having another one."
+  - id: lightheaded_standing
+    added: 2026-11-19
+    level: ROUTINE
+    area: general
+    concern: brief lightheadedness on standing
+    flags: []
+    replies:
+      - "A few seconds of lightheadedness when you stand up quickly is common, often from standing too fast, not drinking enough, or heat. Stand up slowly and keep up your fluids. You can mention it at a routine visit. If you actually lose consciousness, hit your head, or have chest pain or a racing heart with it, get care right away."
+      - "Brief dizziness on standing that passes in a moment is usually from blood pressure adjusting a little slowly, and it's more likely if you're dehydrated or warm. Getting up gradually and drinking enough water usually helps. Bring it up at your next routine visit, and get care right away if you lose consciousness or have chest pain with it."
+      - "Feeling woozy for a second when you get up fast is common and usually harmless. Try rising slowly, sitting on the edge of the bed first, and drinking enough fluids. It's worth mentioning at a routine visit. Get care right away if you actually lose consciousness, get injured, or feel your heart racing or pounding."
+    utterances:
+      - "I get a little dizzy for a second when I stand up too fast, then it goes away."
+      - "Sometimes when I get out of bed quickly my vision goes a bit gray for a moment, but I'm fine after."
+      - "I felt woozy for a few seconds getting up from the couch after a hot shower, it passed right away."
+      - "When I jump up from sitting I get a quick head rush, it only lasts a second."
+      - "Standing up fast makes me lightheaded briefly, especially on hot days, then I feel normal."
+  - id: extra_dose_mistake
+    added: 2026-11-19
+    level: ROUTINE
+    area: general
+    concern: single extra dose of an everyday medicine
+    flags: []
+    replies:
+      - "One extra dose of an everyday medicine like a vitamin or allergy tablet usually isn't dangerous. Skip your next dose if the label says so and go back to your normal schedule. If you're unsure, a pharmacist or Poison Control (1-800-222-1222) can tell you quickly whether you need to do anything."
+      - "Taking one dose twice by mistake is common, and for most everyday medicines it isn't harmful. Check the label for what to do about your next dose. Poison Control (1-800-222-1222) also answers questions like this for free if you want to be sure."
+      - "An accidental second dose of a common medicine is usually not a problem. Go back to your normal schedule, and don't double up to make up for anything. A pharmacist or Poison Control (1-800-222-1222) can confirm it for your specific medicine."
+    utterances:
+      - "I accidentally took my multivitamin twice this morning."
+      - "I forgot I'd already taken my allergy pill and took a second one."
+      - "I think I took my fish oil capsule twice today by mistake."
+      - "Oops, I took my daily vitamin D again because I forgot I had it at breakfast."
+      - "I took two of my regular antacids instead of one, is that ok?"
+  - id: muscle_twitch
+    added: 2026-11-19
+    level: ROUTINE
+    area: general
+    concern: benign muscle twitching
+    flags: []
+    replies:
+      - "Small muscle twitches, like an eyelid flicker or a jerk as you fall asleep, are very common and usually harmless. They're often linked to stress, caffeine, or not enough sleep. Cutting back on those usually helps. If you have shaking you can't control, lose awareness, or notice new weakness, get care right away."
+      - "Twitches like these are usually benign and tend to come with tiredness, stress, or a lot of caffeine. More sleep and less coffee often make them fade. You can mention them at a routine visit. Get care right away for full-body shaking, losing awareness, or new weakness."
+      - "Brief twitches in one small muscle, or a jolt as you drift off, happen to most people and are rarely a sign of anything serious. Rest, less caffeine, and managing stress usually help. Book a routine visit if they go on for weeks, and get care right away if you lose awareness or have shaking you can't stop."
+    utterances:
+      - "My left eyelid has been twitching on and off for a couple of days."
+      - "Sometimes my whole leg jerks right as I'm falling asleep and it wakes me up."
+      - "There's a little muscle in my thumb that keeps twitching since I started drinking more coffee."
+      - "My calf has been fluttering under the skin now and then this week."
+      - "My eyelid keeps doing a tiny flicker when I'm stressed and tired."
+
 # Informational questions: nobody is reporting a symptom. build_dataset.py writes
 # them to data/probes.jsonl. Never train on these; they test whether the assistant
 # escalates a question ABOUT a warning sign as if the person HAD it.

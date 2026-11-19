@@ -22,13 +22,25 @@ jobs:
       - name: Build the dataset
         run: python scripts/build_dataset.py
       - name: Rules-only evaluation (fails if emergency recall drops)
+        # The recall gate covers the original 27 scenarios: it guards against the rules getting worse.
+        # Scenarios marked `added` (collapse, overdose, seizure, ...) are ones the rules were never written for.
         run: |
           python scripts/evaluate.py
           python - <<'PY'
+          import json, yaml
+          added = {s["id"] for s in yaml.safe_load(open("data/scenarios.yaml"))["scenarios"] if "added" in s}
+          rows = [json.loads(line) for line in open("data/test.jsonl")]
+          with open("data/test_original.jsonl", "w") as f:
+              f.writelines(json.dumps(r) + "\n" for r in rows if r["scenario"] not in added)
+          PY
+          python scripts/evaluate.py --test data/test_original.jsonl --name rules_original
+          python - <<'PY'
           import json
           r = json.load(open("reports/eval_rules.json"))["rules"]
-          print(r)
-          assert r["emergency_recall"] >= 0.85, "rule-layer emergency recall dropped"
+          o = json.load(open("reports/eval_rules_original.json"))["rules"]
+          print("all scenarios:", r)
+          print("original 27:", o)
+          assert o["emergency_recall"] >= 0.85, "rule-layer emergency recall dropped"
           assert r["over_triage"] == 0.0, "rules over-triaged a test message"
           PY
       - name: Gold replies pass the reply checks
