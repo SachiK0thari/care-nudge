@@ -71,7 +71,16 @@ Held-out test split: 260 conversations built from 54 patient phrasings the model
 | This model | 95.4% | 2.3% | 98% |
 | This model + rules (what the app runs) | 97.7% | 0.0% | 100% |
 
-On 12 informational questions it never trained on, the model answers all 12 without escalating. Its replies never offered false reassurance and never suggested driving instead of calling 911.
+On 12 informational questions it never trained on, the model answers all 12 without escalating. On the test split, its replies never offered false reassurance and never suggested driving instead of calling 911.
+
+**Challenge set.** 45 hand-written messages not drawn from the training scenarios: slang and typos, negation traps, a third person as the patient, vague messages, informational questions, harmless messages with scary words, and conditions outside the catalog.
+
+| System | Accuracy | Under-triage | Over-triage | Emergency recall |
+|---|---|---|---|---|
+| Rules only | 33.3% | 31.1% | 4.4% | 48% |
+| This model | 86.7% | 2.2% | 8.9% | 95% |
+
+The one under-triage is a possible overdose ("I took about 20 extra strength Tylenol a few hours ago"), rated ROUTINE. The app's rules now catch it. One emergency reply ended with "or drive to the emergency department"; the app removes such sentences, but the model can still write them. The same author wrote this set, so it is not independent.
 
 ## Limitations
 

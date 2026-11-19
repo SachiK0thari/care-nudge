@@ -74,20 +74,30 @@ because the message contains "chest pain". The rules are built to err that way.
 The test split shares its 27 scenarios with training, so it is easy. [`data/challenge.yaml`](https://github.com/SachiK0thari/care-nudge/blob/main/data/challenge.yaml)
 has 45 hand-written messages that are not drawn from those scenarios. They cover slang and typos, negation traps, a third
 person as the patient, vague messages, informational questions, harmless messages with scary words, and conditions outside
-the catalog. The live app was scored through the deployed Space, so there is no model-only row.
+the catalog. The live app was scored through the deployed Space, and the model alone on a Kaggle T4.
 
 | | Accuracy | Under-triage | Over-triage | Emergency recall |
 |---|---|---|---|---|
 | Rules only | 33.3% | 31.1% | 4.4% | 48% |
+| Fine-tuned model | 86.7% | 2.2% | 8.9% | 95% |
 | Fine-tuned model + rules (live app) | 82.2% | 2.2% | 13.3% | 95% |
+
+The model-only row is the cleanest number here: the model has never seen these messages, and nothing was changed after
+seeing its answers. Its one under-triage is the same Tylenol message described below, which it rated ROUTINE.
 
 The app handled every slang, negation, third-person and vague message correctly, but it has one dangerous miss:
 "I took about 20 extra strength Tylenol a few hours ago" (a possible overdose) got ROUTINE, and the reply talked about
 normal dosing. That is now fixed in the rules: a counted dose of 10 or more pills is an emergency, and the reply and banner
 add "call 911 or Poison Control". The table shows the scores from before the fix. Rules-only emergency recall after the
 fix is 52%, but that message is no longer unseen. Six harmless messages were over-triaged, such as "so sad I could barely breathe, haha" (EMERGENCY) and
-"Can anxiety cause chest tightness?" (EMERGENCY, from the rules). This set is not independent either: the same author wrote
-it, with an AI assistant, after writing the rules. Messages from other people are the next step.
+"Can anxiety cause chest tightness?" (EMERGENCY, from the rules).
+
+The reply check found one bad reply. "I can't stop shaking and my chest feels tight" got the right level (EMERGENCY), but
+the model ended with "call 911 now, or drive to the emergency department if you are too unwell to drive". The app now
+drops any sentence on an emergency reply that suggests driving instead of calling 911, and adds the 911 step back if
+needed. The model itself still writes it, so it is a target for the next training run.
+
+This set is not independent either: the same author wrote it, with an AI assistant, after writing the rules. Messages from other people are the next step.
 
 The reports behind these numbers are in [`reports/`](https://github.com/SachiK0thari/care-nudge/tree/main/reports), including every raw model output.
 
