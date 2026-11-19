@@ -10,6 +10,10 @@ from .scheduler import Scheduler
 from .schema import RANK, Triage, more_urgent, parse_reply
 
 SELF_HARM = rules.SELF_HARM
+# Rule flags for situations the model was never trained on: when one fires, the reply comes from
+# the rules even if the model agrees on the level, because the model's wording can be off-topic
+# (live: "My husband collapsed and isn't responding" got a reply about hearing loss and face drooping).
+RULE_LED = {rules.OVERDOSE, rules.COLLAPSE, rules.SAYS_EMERGENCY}
 
 # Used when the model gave nothing usable, or the rules outrank what it said.
 SAFE_REPLY = {
@@ -114,15 +118,17 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     if SELF_HARM in model.red_flags and SELF_HARM not in flags:
         flags.append(SELF_HARM)
     concern = rule.concern if rule_wins else (model.concern or rule.concern)
-    if SELF_HARM in flags and (rule_wins or not visible):
+    rule_led = bool(RULE_LED & set(rule.red_flags)) and RANK[rule.level] >= RANK[model.level]
+    replace = rule_wins or rule_led or not visible
+    if SELF_HARM in flags and replace:
         visible = CRISIS_REPLY
         if rules.OVERDOSE in flags:
             visible = f"{visible} {OVERDOSE_STEP}"
-    elif rules.OVERDOSE in flags and (rule_wins or not visible):
+    elif rules.OVERDOSE in flags and replace:
         visible = OVERDOSE_REPLY
     elif not visible and RANK[level] < RANK[prior_level] and prior_level in STILL:
         visible = STILL[prior_level]
-    elif rule_wins or not visible:
+    elif replace:
         # Never show reassuring model text next to a rule-level escalation.
         visible = SAFE_REPLY[level].format(flags=", ".join(flags) or "your symptoms")
     return Triage(level, flags, concern), guard(level, visible)

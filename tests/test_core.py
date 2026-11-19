@@ -186,6 +186,31 @@ def test_emergency_reply_never_suggests_driving():
     assert policy.guard("URGENT", "Drive to urgent care today.") == "Drive to urgent care today."
 
 
+def _emergency(text: str, flags: str = '"face drooping"') -> str:
+    return f'<triage>{{"level": "EMERGENCY", "red_flags": [{flags}], "concern": "x"}}</triage>\n{text}'
+
+
+def test_rules_write_the_reply_for_signs_the_model_never_trained_on():
+    # Live on the Space: right level, off-topic text.
+    off_topic = _emergency("Sudden hearing loss and face drooping can be signs of a stroke. Please call 911 now.")
+    triage, visible = policy.decide("My husband collapsed and isn't responding", off_topic)
+    assert triage.level == "EMERGENCY" and "hearing" not in visible
+    assert "collapsed or unresponsive" in visible and "911" in visible
+
+    crisis = _emergency("I'm so sorry you're going through this. Please call or text 988 now.",
+                        f'"{policy.SELF_HARM}"')
+    _, visible = policy.decide("I took all my pills because I want to die", crisis)
+    assert "988" in visible and "Poison Control" in visible
+
+    _, visible = policy.decide("I'm having a heart attack", _emergency("Hearing loss can be serious. Call 911."))
+    assert "Hearing" not in visible and "911" in visible
+
+    # Ordinary rule flags still keep the model's own text when it agrees on the level.
+    own = _emergency("Chest pain with sweating can be a heart attack. Call 911 now.", '"chest pain or pressure"')
+    _, visible = policy.decide("My chest hurts and I'm sweating", own)
+    assert visible == "Chest pain with sweating can be a heart attack. Call 911 now."
+
+
 def test_model_history_keeps_the_opening_and_recent_turns():
     session = policy.Session()
     first = Triage("URGENT", ["new flashes or floaters"], "possible retinal tear")

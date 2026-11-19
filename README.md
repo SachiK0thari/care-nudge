@@ -40,6 +40,9 @@ Synthetic data only; do not enter real health information.
   urgent of the two: the rules can raise the model's level but never lower it, and
   urgency never goes down within a chat.
 - Every reply to a warning sign must say what to do next. If the model's reply leaves that out, the app adds it.
+- For an overdose, a collapse, or someone saying they're having a heart attack or stroke, the reply comes from the
+  rules even when the model agrees on the level. These aren't among the training scenarios, so the model's wording can
+  drift off-topic. Emergency replies never suggest driving instead of calling 911.
 - Emergencies get a 911 banner straight away. Urgent cases get same-day times right away.
   For anything that can wait a few days, a booking card appears when the chat ends.
   Booking goes through a mock scheduler that returns FHIR-shaped `Appointment` payloads.
@@ -83,7 +86,8 @@ the catalog. The live app was scored through the deployed Space, and the model a
 | Fine-tuned model + rules (live app) | 82.2% | 2.2% | 13.3% | 95% |
 
 The model-only row is the cleanest number here: the model has never seen these messages, and nothing was changed after
-seeing its answers. Its one under-triage is the same Tylenol message described below, which it rated ROUTINE.
+seeing its answers. Its one under-triage is the same Tylenol message described below, which it rated ROUTINE. It ran in
+fp16 on the T4, while the Space runs bf16, so a few replies can differ from what the live app would write.
 
 The app handled every slang, negation, third-person and vague message correctly, but it has one dangerous miss:
 "I took about 20 extra strength Tylenol a few hours ago" (a possible overdose) got ROUTINE, and the reply talked about
@@ -97,7 +101,8 @@ the model ended with "call 911 now, or drive to the emergency department if you 
 drops any sentence on an emergency reply that suggests driving instead of calling 911, and adds the 911 step back if
 needed. The model itself still writes it, so it is a target for the next training run.
 
-This set is not independent either: the same author wrote it, with an AI assistant, after writing the rules. Messages from other people are the next step.
+This set is not independent either: the same author wrote it, with an AI assistant, after writing the rules. A set
+written by other people would only be worth adding with clinically reviewed gold levels, so it has not been done.
 
 The reports behind these numbers are in [`reports/`](https://github.com/SachiK0thari/care-nudge/tree/main/reports), including every raw model output.
 

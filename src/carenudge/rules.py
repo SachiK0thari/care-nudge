@@ -10,6 +10,11 @@ import re
 
 from .schema import RANK, Triage
 
+# Flags for situations the 27 training scenarios don't cover (policy.RULE_LED).
+OVERDOSE = "possible overdose or poisoning"
+COLLAPSE = "collapsed or unresponsive"
+SAYS_EMERGENCY = "says it's a heart attack or stroke"
+
 # (level, red-flag label, concern, pattern)
 _RULES: list[tuple[str, str, str, re.Pattern]] = [
     ("EMERGENCY", "chest pain or pressure", "possible heart attack", re.compile(
@@ -17,9 +22,9 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
         r"|\b(pain\w*|pressure|hurt\w*|ach\w*|tight\w*|squeez\w*|crush\w*)\b.{0,25}\bchest\b", re.I)),
     # First person or someone present, in the present tense: "what does a heart attack feel like?"
     # and "my dad had a stroke in 2019" are not emergencies.
-    ("EMERGENCY", "says it's a heart attack or stroke", "possible heart attack or stroke", re.compile(
+    ("EMERGENCY", SAYS_EMERGENCY, "possible heart attack or stroke", re.compile(
         r"\b(i'?m|i am|he'?s|she'?s|is|they'?re)\s+having\b.{0,20}\b(heart attack|stroke)\b", re.I)),
-    ("EMERGENCY", "possible overdose or poisoning", "possible overdose or poisoning", re.compile(
+    ("EMERGENCY", OVERDOSE, "possible overdose or poisoning", re.compile(
         r"\b(took|swallowed|ate)\b.{0,30}\b(bottle|whole|all (of )?(my|the|his|her))\b.{0,20}"
         r"\b(pills?|tablets?|meds|medications?)\b|\b(overdosed|od'?d)\b"
         # A counted dose of 10 or more ("took about 20 extra strength Tylenol"), but not "took 20 mg".
@@ -28,7 +33,7 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
         r"\b(pills?|tablets?|caps(ules)?|gummies|tylenol|acetaminophen|paracetamol|advil|motrin|ibuprofen|aleve"
         r"|aspirin|benadryl|ambien|xanax|oxy\w*|percocet|vicodin|melatonin|sleeping pills?|of (my|his|her|the) \w+)\b",
         re.I)),
-    ("EMERGENCY", "collapsed or unresponsive", "possible loss of consciousness", re.compile(
+    ("EMERGENCY", COLLAPSE, "possible loss of consciousness", re.compile(
         r"\b(collapsed|passed out|fainted|unresponsive|not responding|isn'?t responding|won'?t wake up)\b", re.I)),
     ("EMERGENCY", "stroke warning signs", "possible stroke or TIA", re.compile(
         r"\b(face|mouth)\b.{0,30}\b(droop\w*|sagging)\b|\bslurr\w*"
@@ -85,7 +90,6 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
      re.compile(r"lost \w+ (pounds|lbs)|los(t|ing) (a lot of )?weight|dropping weight|night sweats", re.I)),
 ]
 
-OVERDOSE = "possible overdose or poisoning"
 SELF_HARM = "thoughts of suicide or self-harm"
 # "no idea", "not sure" and the like are not denials of a symptom.
 _NEGATION = re.compile(
