@@ -70,6 +70,7 @@ def main() -> None:
     rows = [json.loads(line) for line in Path(args.test).read_text().splitlines()]
     has_model = model.load(args.model, args.adapter)
     by_system: dict[str, list[tuple[str, str]]] = {"rules": [], "model": [], "model+rules": []}
+    by_category: dict[str, dict[str, list[tuple[str, str]]]] = {}  # challenge set: one score per category
     shots = few_shot_block(ROOT / "data" / "train.jsonl") if args.few_shot else ""
     bad_format, misses, outputs = 0, [], []
     for row in tqdm(rows, desc=args.name, disable=not has_model):
@@ -95,8 +96,22 @@ def main() -> None:
             if RANK[final] < RANK[gold] >= RANK["SOON"]:
                 misses.append({"scenario": row["scenario"], "gold": gold, "predicted": final,
                                "text": row["messages"][-1]["content"]})
+        if "category" in row:
+            cat = by_category.setdefault(row["category"], {})
+            for name, pairs in by_system.items():
+                if pairs:
+                    cat.setdefault(name, []).append(pairs[-1])
 
-    report = {name: score(pairs) for name, pairs in by_system.items() if pairs}
+    report: dict = {name: score(pairs) for name, pairs in by_system.items() if pairs}
+    if by_category:
+        report["by_category"] = {c: {name: score(p) for name, p in systems.items()}
+                                 for c, systems in by_category.items()}
+    if by_category:  # challenge set: every row that some system got wrong, under- or over-triage
+        names = [n for n in by_system if by_system[n]]
+        report["errors"] = [
+            {"category": r["category"], "gold": r["level"], **{n: by_system[n][i][1] for n in names},
+             "text": r["messages"][-1]["content"]}
+            for i, r in enumerate(rows) if any(by_system[n][i][1] != r["level"] for n in names)]
     if has_model:
         report["model"]["format_ok"] = 1 - bad_format / len(rows)
         report["under_triaged_examples"] = misses

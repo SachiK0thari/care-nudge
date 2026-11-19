@@ -12,6 +12,10 @@ reports/*
 !reports/eval_finetuned_probes.json
 !reports/outputs_finetuned.jsonl
 !reports/outputs_finetuned_probes.jsonl
+# challenge set: rules-only and the live app
+!reports/eval_rules_challenge.json
+!reports/eval_space_challenge.json
+!reports/outputs_space_challenge.jsonl
 data/*.jsonl
 .env
 

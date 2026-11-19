@@ -173,7 +173,11 @@ def main() -> None:
     # informational questions (nobody is reporting a symptom): a probe set, never trained on
     probes = [{"scenario": "info_probe", "level": "ROUTINE", "shape": "probe", "messages": [sys_msg(), user(q)]}
               for q in spec.get("info_probes", [])]
-    splits = {"val": train[:n_val], "train": train[n_val:], "test": test, "probes": probes}
+    # hand-written challenge set (data/challenge.yaml): not generated from the catalog, never trained on
+    challenge = [{"scenario": f"challenge_{m['category']}", "level": m["level"], "shape": "challenge",
+                  "category": m["category"], "by": m["by"], "messages": [sys_msg(), user(m["text"])]}
+                 for m in yaml.safe_load((ROOT / "data" / "challenge.yaml").read_text())["messages"]]
+    splits = {"val": train[:n_val], "train": train[n_val:], "test": test, "probes": probes, "challenge": challenge}
     for name, rows in splits.items():
         path = ROOT / "data" / f"{name}.jsonl"
         path.write_text("".join(json.dumps(r) + "\n" for r in rows))

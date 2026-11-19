@@ -69,13 +69,31 @@ the fine-tuned model answers all 12 without escalating. With the rules added it'
 the rules escalate "What does a heart attack feel like - is it always chest pain?"
 because the message contains "chest pain". The rules are built to err that way.
 
+### Challenge set
+
+The test split shares its 27 scenarios with training, so it is easy. [`data/challenge.yaml`](https://github.com/SachiK0thari/care-nudge/blob/main/data/challenge.yaml)
+has 45 hand-written messages that are not drawn from those scenarios. They cover slang and typos, negation traps, a third
+person as the patient, vague messages, informational questions, harmless messages with scary words, and conditions outside
+the catalog. The live app was scored through the deployed Space, so there is no model-only row.
+
+| | Accuracy | Under-triage | Over-triage | Emergency recall |
+|---|---|---|---|---|
+| Rules only | 33.3% | 31.1% | 4.4% | 48% |
+| Fine-tuned model + rules (live app) | 82.2% | 2.2% | 13.3% | 95% |
+
+The app handled every slang, negation, third-person and vague message correctly, but it has one dangerous miss:
+"I took about 20 extra strength Tylenol a few hours ago" (a possible overdose) got ROUTINE, and the reply talked about
+normal dosing. Six harmless messages were over-triaged, such as "so sad I could barely breathe, haha" (EMERGENCY) and
+"Can anxiety cause chest tightness?" (EMERGENCY, from the rules). This set is not independent either: the same author wrote
+it, with an AI assistant, after writing the rules. Messages from other people are the next step.
+
 The reports behind these numbers are in [`reports/`](https://github.com/SachiK0thari/care-nudge/tree/main/reports), including every raw model output.
 
 ## Limitations
 
 - **The test set shares authorship with the training set.** The phrasings are new, but one person wrote both from the
   same list of 27 scenarios. Real patients will word things in ways neither covers, so these numbers overstate
-  real-world performance. An independently written challenge set is the next step.
+  real-world performance. The challenge set in Results is harder, but written by the same author.
 - **The rules were written with the same scenarios in view.** Their patterns were tuned against the same 27 scenarios,
   which partly explains why they never over-triage a test message. Expect more false alarms on other wording.
 - **Narrow coverage.** 27 scenarios is a small slice of medicine.
@@ -107,6 +125,7 @@ in about an hour of GPU time.
 | `scripts/build_dataset.py` | Builds the synthetic conversations, with held-out phrasings for test |
 | `scripts/train.py` | QLoRA fine-tuning with TRL |
 | `scripts/evaluate.py` | Scores rules only, model only, and model + rules |
+| `scripts/evaluate_space.py` | Scores the deployed app (model + rules) through the live Space, no GPU |
 | `scripts/check_replies.py` | Checks the reply text: names the action, no false reassurance, no driving advice |
 
 ## License

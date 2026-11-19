@@ -1,0 +1,73 @@
+# Challenge set: hand-written patient messages that are not drawn from scenarios.yaml, scored
+# separately from the test split and never trained on. Gold levels follow the system prompt:
+#   EMERGENCY 911 / emergency department now, URGENT seen today, SOON within days,
+#   ROUTINE self-care or a routine visit, NEEDS_INFO one more detail needed.
+# Messages that a reasonable clinician could place at two levels were left out, so a miss is a miss.
+#
+# Provenance: written on 2026-11-18 by the same author as the rules (with an AI assistant), after the
+# rule fixes in commits 1ea3258 and 40cfba6, and the rules were NOT tuned on it afterwards. It is
+# therefore not independent. Messages written by other people should be added under `by:` other than
+# "author" so the two halves can be reported separately.
+#
+# build_dataset.py turns this into data/challenge.jsonl:
+#   python scripts/evaluate.py --test data/challenge.jsonl --name challenge
+
+messages:
+  # Slang, typos, texting style
+  - {category: slang, level: EMERGENCY, by: author, text: "chest is killin me and my left arm feels heavy"}
+  - {category: slang, level: EMERGENCY, by: author, text: "cant feel my arm rite and my words r coming out all wrong"}
+  - {category: slang, level: EMERGENCY, by: author, text: "my face went all lopsided in the mirror like 10 min ago"}
+  - {category: slang, level: EMERGENCY, by: author, text: "threw up twice and it looked like coffee grinds??"}
+  - {category: slang, level: EMERGENCY, by: author, text: "cant breath right, feels like im sucking air thru a straw"}
+  - {category: slang, level: EMERGENCY, by: author, text: "lips r puffing up after the shrimp and my throat feels weird"}
+  - {category: slang, level: URGENT, by: author, text: "gettin these zigzag sparkly lights in my eye and a bunch of new black dots"}
+  - {category: slang, level: URGENT, by: author, text: "my legs all puffed up on one side n the calf is hot and sore"}
+  - {category: slang, level: URGENT, by: author, text: "burns when i pee, fever of 102 and my back hurts on the left side"}
+
+  # Negation traps: a denial next to a real warning sign, or only denials
+  - {category: negation, level: EMERGENCY, by: author, text: "No fever, but I've had crushing pressure in my chest for half an hour."}
+  - {category: negation, level: EMERGENCY, by: author, text: "I don't know if it's related, but half my face is numb and drooping."}
+  - {category: negation, level: EMERGENCY, by: author, text: "Not a big deal probably, but I passed black sticky poop twice today."}
+  - {category: negation, level: EMERGENCY, by: author, text: "I never get headaches, and this one hit like a bat to the head out of nowhere."}
+  - {category: negation, level: SOON, by: author, text: "No pain at all, but I can feel a firm knot in my breast that is new since last month."}
+  - {category: negation, level: ROUTINE, by: author, text: "No chest pain, no shortness of breath, just a stuffy nose and sneezing."}
+  - {category: negation, level: ROUTINE, by: author, text: "I don't have any numbness or weakness, my lower back is just stiff after gardening."}
+  - {category: negation, level: ROUTINE, by: author, text: "Nothing is swollen and I can breathe fine, I just have an itchy patch on my arm from a new soap."}
+
+  # Someone else is the patient
+  - {category: third_person, level: EMERGENCY, by: author, text: "my mom's face looks droopy and she isn't making any sense"}
+  - {category: third_person, level: EMERGENCY, by: author, text: "My dad is clutching his chest and sweating through his shirt."}
+  - {category: third_person, level: EMERGENCY, by: author, text: "Our baby is 5 weeks old and has been warm all evening, 100.9 rectally."}
+  - {category: third_person, level: EMERGENCY, by: author, text: "My son got stung by a bee and now his tongue is getting big."}
+  - {category: third_person, level: EMERGENCY, by: author, text: "My wife says a dark shadow is moving across the vision in her right eye."}
+  - {category: third_person, level: EMERGENCY, by: author, text: "My teenager told me she's been thinking about ending it all."}
+  - {category: third_person, level: URGENT, by: author, text: "My grandpa's shin has a red, hot patch that has doubled in size since this morning."}
+
+  # Vague, but the words still point somewhere (or genuinely don't)
+  - {category: vague, level: EMERGENCY, by: author, text: "Something is really wrong. My heart is pounding and I can't catch my breath."}
+  - {category: vague, level: EMERGENCY, by: author, text: "I can't stop shaking and my chest feels tight."}
+  - {category: vague, level: EMERGENCY, by: author, text: "Everything went dark in my left eye a few minutes ago and it hasn't come back."}
+  - {category: vague, level: NEEDS_INFO, by: author, text: "I just don't feel right today."}
+  - {category: vague, level: NEEDS_INFO, by: author, text: "I've been feeling kind of off for a couple of days."}
+
+  # Informational questions that mention warning signs (nobody is reporting a symptom)
+  - {category: informational, level: ROUTINE, by: author, text: "How do I know if a headache is serious enough to go to the ER?"}
+  - {category: informational, level: ROUTINE, by: author, text: "What's the difference between a TIA and a stroke?"}
+  - {category: informational, level: ROUTINE, by: author, text: "Can anxiety cause chest tightness?"}
+  - {category: informational, level: ROUTINE, by: author, text: "What are the signs of a blood clot in the leg?"}
+  - {category: informational, level: ROUTINE, by: author, text: "Is it normal to get more floaters as you get older?"}
+  - {category: informational, level: ROUTINE, by: author, text: "How much does a mole have to change before I should get it checked?"}
+
+  # Benign messages that use scary words
+  - {category: benign_scary, level: ROUTINE, by: author, text: "My heart attack risk calculator said 5%. Is that good?"}
+  - {category: benign_scary, level: ROUTINE, by: author, text: "My chest muscles are sore from doing push-ups for the first time."}
+  - {category: benign_scary, level: ROUTINE, by: author, text: "That movie was so sad I was crying until I could barely breathe, haha."}
+  - {category: benign_scary, level: ROUTINE, by: author, text: "My dad's stroke rehab appointment got moved. Can I reschedule it for him?"}
+  - {category: benign_scary, level: ROUTINE, by: author, text: "My doctor said my chest x-ray was clear. Can I go back to the gym?"}
+  - {category: benign_scary, level: ROUTINE, by: author, text: "I'm dying to know when my flu shot appointment is."}
+
+  # Conditions outside the 27 scenarios
+  - {category: out_of_catalog, level: EMERGENCY, by: author, text: "I took about 20 extra strength Tylenol a few hours ago."}
+  - {category: out_of_catalog, level: EMERGENCY, by: author, text: "My coworker just fainted and now she's jerking on the floor."}
+  - {category: out_of_catalog, level: SOON, by: author, text: "I have a rash shaped like a bullseye on my thigh, a week after hiking."}
+  - {category: out_of_catalog, level: ROUTINE, by: author, text: "I touched the oven rack and have a small red spot on my finger. It's not blistered."}
