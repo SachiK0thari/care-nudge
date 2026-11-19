@@ -186,6 +186,40 @@ def test_emergency_reply_never_suggests_driving():
     assert policy.guard("URGENT", "Drive to urgent care today.") == "Drive to urgent care today."
 
 
+def test_emergency_reply_that_only_hedges_on_911_is_replaced():
+    # Live on the Space with the v4 model, word for word.
+    hedged = ("Thanks for telling me. Sweating, shaking, fast heartbeat, and chest pressure can mean a severe drop "
+              "in blood sugar or a heart attack, especially if you have diabetes. Sugar is the fastest way to tell. "
+              "If it's low, eat something sweet like juice or candy. Call 911 if you are confused or can't get your "
+              "symptoms under control.")
+    raw = _emergency(hedged, '"trembling", "chest pain or pressure"')
+    _, visible = policy.decide("I can't stop shaking and my chest feels tight.", raw)
+    assert "sweet" not in visible and "911" in visible and visible.startswith("What you're describing")
+    # Plain instructions stay, even next to a conditional one.
+    for fine in ("Go to the emergency department now, and call 911 if you feel faint or dizzy.",
+                 "Call 911 right away, even if the symptoms fade.",
+                 "Please call or text 988 now to talk with someone, or call 911 if you are in immediate danger.",
+                 "If they aren't breathing normally, start CPR. Call 911 now."):
+        assert policy.guard("EMERGENCY", fine) == fine
+    # Below emergency the guard doesn't apply.
+    assert policy.guard("URGENT", "Please be seen today, and call 911 if it gets worse.") == (
+        "Please be seen today, and call 911 if it gets worse.")
+
+
+def test_only_known_phone_numbers_reach_the_patient():
+    # Live: a lone "Can it wait?" got an invented clinic number.
+    raw = ('<triage>{"level": "ROUTINE", "red_flags": [], "concern": "x"}</triage>\n'
+           "I understand. You can request a visit through the app, or you can call 617-555-0199 to get a refill.")
+    _, visible = policy.decide("I'm really busy this week. Can it wait?", raw)
+    assert "617" not in visible and visible  # the whole reply was that sentence, so the fallback is shown
+    # From the v4 test outputs: a wrong Poison Control number, in the sentence that also says to call 911.
+    wrong = "Please call 911 or Poison Control (1-800-222-4224) now. You can also call or text 988."
+    assert policy.guard("EMERGENCY", wrong) == wrong.replace("222-4224", "222-1222")
+    right = "Call 911 or Poison Control (1-800-222-1222) now."
+    assert policy.guard("EMERGENCY", right) == right
+    assert policy.guard("SOON", "Book a visit this week. Or call (415) 555-0100.") == "Book a visit this week."
+
+
 def _emergency(text: str, flags: str = '"face drooping"') -> str:
     return f'<triage>{{"level": "EMERGENCY", "red_flags": [{flags}], "concern": "x"}}</triage>\n{text}'
 

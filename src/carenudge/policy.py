@@ -83,6 +83,16 @@ NEXT_STEP = {
 TRANSPORT = re.compile(r"\bdriv(e|es|ing)\b|\b(someone|somebody|a friend|family)\b.{0,20}\b(take|bring)s? you\b", re.I)
 AGAINST = re.compile(r"\b(not|don'?t|never|rather than|instead of|avoid)\b", re.I)
 _SENTENCE = re.compile(r"(?<=[.!?])\s+")
+# An emergency instruction made conditional ("call 911 if you are confused") is a hedge, not a next step.
+# Live: "I can't stop shaking and my chest feels tight" got "eat something sweet ... call 911 if you are
+# confused", copied from the low-blood-sugar answer. Checked per clause, so "call or text 988, or call 911 if
+# you are in immediate danger" and "call 911 now, even if it fades" still count as plain instructions.
+_CLAUSE = re.compile(r"[,;:]|\s(?:or|and|but|then)\s|\s[-\u2013\u2014]\s")
+_CONDITION = re.compile(r"(?<!even )\b(if|unless|in case|should you)\b", re.I)
+# The model has invented phone numbers ("call 617-555-0199"). Only these may reach a patient.
+_PHONE = re.compile(r"(?:\+?1[-.\s]?)?\(?\b\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b")
+POISON_CONTROL = "1-800-222-1222"
+KNOWN_NUMBERS = (POISON_CONTROL,)  # 911 and 988 are too short to match _PHONE
 CRISIS_BANNER = "### Call or text 988 now (Suicide & Crisis Lifeline)\nIf you are in immediate danger, call 911."
 # An overdose is a medical emergency first, whatever the intent: acetaminophen can harm the liver before any
 # symptoms. 988 is offered, not assumed; the self-harm flag is only set when the patient's own words say so.
@@ -131,14 +141,43 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     elif replace:
         # Never show reassuring model text next to a rule-level escalation.
         visible = SAFE_REPLY[level].format(flags=", ".join(flags) or "your symptoms")
-    return Triage(level, flags, concern), guard(level, visible)
+    return Triage(level, flags, concern), guard(level, visible, flags)
 
 
-def guard(level: str, visible: str) -> str:
+def guard(level: str, visible: str, flags: list[str] | None = None) -> str:
     """The last pass over what the patient sees, whatever the model wrote."""
+    fallback = SAFE_REPLY[level].format(flags=", ".join(flags or []) or "your symptoms") if level in SAFE_REPLY else ""
+    visible = drop_unknown_numbers(visible)
     if level == "EMERGENCY":
         visible = drop_driving(visible)  # may remove the 911 line too; ensure_action puts one back
+        if hedges_emergency(visible):
+            visible = fallback  # the rest of a hedged reply (e.g. "eat something sweet first") can't be trusted
+    if not visible:
+        visible = fallback
     return ensure_action(level, visible)
+
+
+def hedges_emergency(text: str) -> bool:
+    """True when the reply names 911/ER only inside conditions, never as a plain instruction."""
+    clauses = [c for s in _SENTENCE.split(text) for c in _CLAUSE.split(s)]
+    acting = [c for c in clauses if ACTION["EMERGENCY"].search(c)]
+    return bool(acting) and all(_CONDITION.search(c) for c in acting)
+
+
+def drop_unknown_numbers(visible: str) -> str:
+    """Only numbers the app supplies reach the patient. A wrong Poison Control number is corrected (the model
+    wrote "1-800-222-4224" once, in a sentence that also said to call 911); any other unknown number takes its
+    sentence with it."""
+    kept = []
+    for sentence in _SENTENCE.split(visible):
+        unknown = [n for n in _PHONE.findall(sentence) if not any(k[-8:] in n for k in KNOWN_NUMBERS)]
+        if unknown and re.search(r"poison control", sentence, re.I):
+            for n in unknown:
+                sentence = sentence.replace(n, POISON_CONTROL)
+        elif unknown:
+            continue
+        kept.append(sentence)
+    return " ".join(kept)
 
 
 def _drives(sentence: str) -> bool:

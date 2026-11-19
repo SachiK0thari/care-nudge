@@ -9,18 +9,18 @@
   },
   "model": {
     "n": 45,
-    "accuracy": 0.8666666666666667,
-    "under_triage": 0.022222222222222223,
-    "over_triage": 0.08888888888888889,
-    "emergency_recall": 0.9523809523809523,
-    "urgent_plus_recall": 0.96,
+    "accuracy": 0.9555555555555556,
+    "under_triage": 0.0,
+    "over_triage": 0.044444444444444446,
+    "emergency_recall": 1.0,
+    "urgent_plus_recall": 1.0,
     "format_ok": 1.0
   },
   "model+rules": {
     "n": 45,
-    "accuracy": 0.8444444444444444,
+    "accuracy": 0.9111111111111111,
     "under_triage": 0.0,
-    "over_triage": 0.13333333333333333,
+    "over_triage": 0.08888888888888889,
     "emergency_recall": 1.0,
     "urgent_plus_recall": 1.0
   },
@@ -166,17 +166,17 @@
       },
       "model": {
         "n": 6,
-        "accuracy": 0.5,
+        "accuracy": 0.8333333333333334,
         "under_triage": 0.0,
-        "over_triage": 0.3333333333333333,
+        "over_triage": 0.16666666666666666,
         "emergency_recall": 0.0,
         "urgent_plus_recall": 0.0
       },
       "model+rules": {
         "n": 6,
-        "accuracy": 0.5,
+        "accuracy": 0.8333333333333334,
         "under_triage": 0.0,
-        "over_triage": 0.3333333333333333,
+        "over_triage": 0.16666666666666666,
         "emergency_recall": 0.0,
         "urgent_plus_recall": 0.0
       }
@@ -192,17 +192,17 @@
       },
       "model": {
         "n": 4,
-        "accuracy": 0.25,
-        "under_triage": 0.25,
-        "over_triage": 0.5,
-        "emergency_recall": 0.5,
-        "urgent_plus_recall": 0.5
+        "accuracy": 0.75,
+        "under_triage": 0.0,
+        "over_triage": 0.25,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
       },
       "model+rules": {
         "n": 4,
-        "accuracy": 0.5,
+        "accuracy": 0.75,
         "under_triage": 0.0,
-        "over_triage": 0.5,
+        "over_triage": 0.25,
         "emergency_recall": 1.0,
         "urgent_plus_recall": 1.0
       }
@@ -381,8 +381,8 @@
       "category": "benign_scary",
       "gold": "ROUTINE",
       "rules": "NEEDS_INFO",
-      "model": "NEEDS_INFO",
-      "model+rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
       "text": "My heart attack risk calculator said 5%. Is that good?"
     },
     {
@@ -413,8 +413,8 @@
       "category": "benign_scary",
       "gold": "ROUTINE",
       "rules": "NEEDS_INFO",
-      "model": "SOON",
-      "model+rules": "SOON",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
       "text": "My doctor said my chest x-ray was clear. Can I go back to the gym?"
     },
     {
@@ -424,14 +424,6 @@
       "model": "ROUTINE",
       "model+rules": "ROUTINE",
       "text": "I'm dying to know when my flu shot appointment is."
-    },
-    {
-      "category": "out_of_catalog",
-      "gold": "EMERGENCY",
-      "rules": "EMERGENCY",
-      "model": "ROUTINE",
-      "model+rules": "EMERGENCY",
-      "text": "I took about 20 extra strength Tylenol a few hours ago."
     },
     {
       "category": "out_of_catalog",
@@ -445,8 +437,8 @@
       "category": "out_of_catalog",
       "gold": "ROUTINE",
       "rules": "NEEDS_INFO",
-      "model": "SOON",
-      "model+rules": "SOON",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
       "text": "I touched the oven rack and have a small red spot on my finger. It's not blistered."
     }
   ],

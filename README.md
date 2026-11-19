@@ -41,31 +41,49 @@ Synthetic data only; do not enter real health information.
   urgency never goes down within a chat.
 - Every reply to a warning sign must say what to do next. If the model's reply leaves that out, the app adds it.
 - For an overdose, a collapse, or someone saying they're having a heart attack or stroke, the reply comes from the
-  rules even when the model agrees on the level. These aren't among the training scenarios, so the model's wording can
-  drift off-topic. Emergency replies never suggest driving instead of calling 911.
+  rules even when the model agrees on the level. These are the situations where the model's wording was least reliable
+  (the earlier model gave off-topic replies).
+- A last pass checks the reply text before it's shown. Emergency replies never suggest driving instead of calling 911,
+  and an emergency reply that only says "call 911 *if* things get worse" is replaced with a plain instruction. Phone
+  numbers the app didn't supply are removed, and a wrong Poison Control number is corrected.
 - Emergencies get a 911 banner straight away. Urgent cases get same-day times right away.
   For anything that can wait a few days, a booking card appears when the chat ends.
   Booking goes through a mock scheduler that returns FHIR-shaped `Appointment` payloads.
 
 ## Results
 
-Held-out test split: 260 conversations built from 54 patient phrasings the model never saw in training (2 per scenario),
-each wrapped in different openers, closers and conversation shapes.
+Held-out test split: 314 conversations built from 66 patient phrasings the model never saw in training (2 for each of
+33 scenarios), each wrapped in different openers, closers and conversation shapes.
 Under-triage means a warning sign that got a less urgent level than it needs. It is the number that matters most.
+
+| | Accuracy | Under-triage | Emergency recall |
+|---|---|---|---|
+| Rules only | 54.1% | 25.5% | 65% |
+| Fine-tuned model | 96.8% | 0.6% | 99% |
+| Fine-tuned model + rules (what the app runs) | 97.5% | 0.0% | 100% |
+
+The rules were written for the first 27 scenarios and know nothing about the six added later (collapse, overdose,
+seizure, and a harmless look-alike for each), which is why rules-only recall is lower than before.
+
+**On the original 260 conversations**, which are the same rows earlier versions were scored on:
 
 | | Accuracy | Under-triage | Emergency recall |
 |---|---|---|---|
 | Rules only | 65.4% | 19.2% | 85% |
 | Base model, zero-shot | 57.3% | 13.8% | 68% |
 | Base model, few-shot prompt | 69.6% | 17.3% | 57% |
-| Fine-tuned model | 95.4% | 2.3% | 98% |
-| Fine-tuned model + rules (what the app runs) | 97.7% | 0.0% | 100% |
+| Previous fine-tune (27 scenarios) | 95.4% | 2.3% | 98% |
+| Current fine-tune | 96.5% | 0.8% | 99% |
+| Current fine-tune + rules | 97.3% | 0.0% | 100% |
 
 The few-shot row is the same base model with one worked example per level in the prompt. It shows that prompting alone
-doesn't get there: it raises accuracy but misses more emergencies than the zero-shot prompt.
+doesn't get there: it raises accuracy but misses more emergencies than the zero-shot prompt. With the rules added, the
+current model over-triages slightly more than the previous one (2.7% vs 2.3%): it calls a few urgent eye problems and one
+"soon" symptom an emergency.
 
 Reply text is checked as well as the level. None of the fine-tuned model's replies gave false reassurance or suggested
-driving instead of calling 911, and it kept the urgency level in all 44 cases where the patient asked to wait.
+driving instead of calling 911. It kept the urgency level in all 50 cases where the patient asked to wait, and restated
+the next step in 248 of 250 warning-sign replies (the previous model: 207 of 220).
 
 On 12 informational questions (for example "What are the warning signs of a stroke?"),
 the fine-tuned model answers all 12 without escalating. With the rules added it's 11/12:
@@ -74,32 +92,36 @@ because the message contains "chest pain". The rules are built to err that way.
 
 ### Challenge set
 
-The test split shares its 27 scenarios with training, so it is easy. [`data/challenge.yaml`](https://github.com/SachiK0thari/care-nudge/blob/main/data/challenge.yaml)
+The test split shares its scenarios with training, so it is easy. [`data/challenge.yaml`](https://github.com/SachiK0thari/care-nudge/blob/main/data/challenge.yaml)
 has 45 hand-written messages that are not drawn from those scenarios. They cover slang and typos, negation traps, a third
 person as the patient, vague messages, informational questions, harmless messages with scary words, and conditions outside
-the catalog. The live app was scored through the deployed Space, and the model alone on a Kaggle T4.
+the catalog. The live app was scored through the deployed Space, and the models alone on a Kaggle T4.
 
 | | Accuracy | Under-triage | Over-triage | Emergency recall |
 |---|---|---|---|---|
 | Rules only | 33.3% | 31.1% | 4.4% | 48% |
-| Fine-tuned model | 86.7% | 2.2% | 8.9% | 95% |
-| Fine-tuned model + rules (live app) | 82.2% | 2.2% | 13.3% | 95% |
+| Previous fine-tune | 86.7% | 2.2% | 8.9% | 95% |
+| Current fine-tune | 95.6% | 0.0% | 4.4% | 100% |
+| Previous fine-tune + rules (live app at the time) | 82.2% | 2.2% | 13.3% | 95% |
 
-The model-only row is the cleanest number here: the model has never seen these messages, and nothing was changed after
-seeing its answers. Its one under-triage is the same Tylenol message described below, which it rated ROUTINE. It ran in
-fp16 on the T4, while the Space runs bf16, so a few replies can differ from what the live app would write.
+The previous model's row is the cleanest number here: it had never seen these messages, and nothing was changed after
+seeing its answers. Its one under-triage was "I took about 20 extra strength Tylenol a few hours ago" (a possible
+overdose), rated ROUTINE with a reply about normal dosing. The current model's row is not blind in the same way: the
+overdose and collapse scenarios were added after seeing that miss and a seizure message the old model handled poorly.
+Leaving out those two messages, it went from 38 to 41 correct out of 43. Its remaining misses are "so sad I could barely
+breathe, haha" (EMERGENCY) and a bullseye rash after a hike (URGENT, should be soon). The models ran in fp16 on the T4,
+while the Space runs bf16, so a few replies can differ from what the live app would write.
 
-The app handled every slang, negation, third-person and vague message correctly, but it has one dangerous miss:
-"I took about 20 extra strength Tylenol a few hours ago" (a possible overdose) got ROUTINE, and the reply talked about
-normal dosing. That is now fixed in the rules: a counted dose of 10 or more pills is an emergency, and the reply and banner
-add "call 911 or Poison Control". The table shows the scores from before the fix. Rules-only emergency recall after the
-fix is 52%, but that message is no longer unseen. Six harmless messages were over-triaged, such as "so sad I could barely breathe, haha" (EMERGENCY) and
-"Can anxiety cause chest tightness?" (EMERGENCY, from the rules).
+The Tylenol miss is also fixed in the rules: a counted dose of 10 or more pills is an emergency, and the reply and banner
+add "call 911 or Poison Control". The live-app row shows the scores from before that fix.
 
-The reply check found one bad reply. "I can't stop shaking and my chest feels tight" got the right level (EMERGENCY), but
-the model ended with "call 911 now, or drive to the emergency department if you are too unwell to drive". The app now
-drops any sentence on an emergency reply that suggests driving instead of calling 911, and adds the 911 step back if
-needed. The model itself still writes it, so it is a target for the next training run.
+The reply check found one bad reply from the previous model: "I can't stop shaking and my chest feels tight" got the right
+level, but ended with "call 911 now, or drive to the emergency department if you are too unwell to drive". The app now
+drops any sentence on an emergency reply that suggests driving instead of calling 911. The current model doesn't write
+that sentence, but its reply to the same message suggested trying sugar first and calling 911 only "if you are confused
+or can't keep your food down". The app now replaces emergency replies that only mention 911 as a condition, so the patient
+sees a plain "call 911 now". Across 1,277 saved replies from every model version, the hedge and phone-number checks changed 7,
+all of them hedges or wrong details. One was a wrong Poison Control number from the current model, which the app now corrects.
 
 This set is not independent either: the same author wrote it, with an AI assistant, after writing the rules. A set
 written by other people would only be worth adding with clinically reviewed gold levels, so it has not been done.
@@ -109,14 +131,14 @@ The reports behind these numbers are in [`reports/`](https://github.com/SachiK0t
 ## Limitations
 
 - **The test set shares authorship with the training set.** The phrasings are new, but one person wrote both from the
-  same list of 27 scenarios. Real patients will word things in ways neither covers, so these numbers overstate
+  same list of 33 scenarios. Real patients will word things in ways neither covers, so these numbers overstate
   real-world performance. The challenge set in Results is harder, but written by the same author.
-- **The rules were written with the same scenarios in view.** Their patterns were tuned against the same 27 scenarios,
+- **The rules were written with the same scenarios in view.** Their patterns were tuned against the first 27 scenarios,
   which partly explains why they never over-triage a test message. Expect more false alarms on other wording.
-- **Narrow coverage.** 27 scenarios is a small slice of medicine.
-- **The model sometimes drops the next step when a patient pushes back.** In 13 of 44 such replies it held the level but
-  didn't restate what to do. The app now appends the next step in that case, so patients always see it.
-  Fixing it in the model itself needs another training run.
+- **Narrow coverage.** 33 scenarios is a small slice of medicine.
+- **The model's text still needs a safety net.** It can hedge on an emergency, invent a phone number, or borrow advice
+  from a nearby scenario, as in the chest-tightness example above. The app catches the patterns seen so far; new ones
+  would need new checks or more training data.
 - **English only, US emergency numbers.** The scenarios and replies are demo content and not clinically validated.
 
 ## Run it

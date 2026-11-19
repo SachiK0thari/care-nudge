@@ -43,7 +43,8 @@ def main() -> None:
         triage, visible = parse_reply(raw)
         gold, problems = row["level"], []
         if app:
-            visible = guard(row.get("final_level") or (triage.level if triage else "NEEDS_INFO"), visible)
+            visible = guard(row.get("final_level") or (triage.level if triage else "NEEDS_INFO"), visible,
+                            triage.red_flags if triage else [])
         fmt += triage is not None
         words.append(len(visible.split()))
         if gold in ACTION:  # a warning sign: SOON or above

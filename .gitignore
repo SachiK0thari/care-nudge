@@ -18,6 +18,11 @@ reports/*
 !reports/outputs_space_challenge.jsonl
 !reports/eval_finetuned_challenge.json
 !reports/outputs_finetuned_challenge.jsonl
+# the previous model (27 scenarios), quoted in the README comparison rows
+!reports/eval_finetuned_v3.json
+!reports/outputs_finetuned_v3.jsonl
+!reports/eval_finetuned_challenge_v3.json
+!reports/outputs_finetuned_challenge_v3.jsonl
 data/*.jsonl
 .env
 
