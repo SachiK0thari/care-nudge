@@ -8,7 +8,7 @@ it without touching the app.
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Protocol
+from typing import Any, Protocol
 
 PCP = {"reference": "Practitioner/demo-pcp", "display": "Dr. Avery Lin, Primary Care (demo)"}
 
@@ -34,7 +34,7 @@ class MockScheduler:
                 day += timedelta(days=1)
                 if day.weekday() < 5:
                     starts.append(day.replace(hour=9 + len(starts), minute=30, second=0, microsecond=0))
-        slots = [
+        slots: list[dict[str, Any]] = [
             {
                 "resourceType": "Appointment",
                 "id": f"demo-{start:%Y%m%d%H%M}",

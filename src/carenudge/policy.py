@@ -13,16 +13,34 @@ SELF_HARM = rules.SELF_HARM
 
 # Used when the model gave nothing usable, or the rules outrank what it said.
 SAFE_REPLY = {
-    "EMERGENCY": "What you're describing ({flags}) can be a sign of a medical emergency. Please call 911 or go to the nearest emergency department now.",
+    "EMERGENCY": (
+        "What you're describing ({flags}) can be a sign of a medical emergency. Please call 911 or go to the nearest "
+        "emergency department now."
+    ),
     "URGENT": "What you're describing ({flags}) should not wait. Please arrange to be seen today.",
-    "SOON": "What you're describing ({flags}) should be checked by your primary care team. Please book a visit in the next few days rather than waiting.",
-    "ROUTINE": "I didn't pick up any warning signs in what you described. If anything changes or gets worse, tell me or contact your care team.",
-    "NEEDS_INFO": "Can you tell me a bit more - what symptoms you're noticing, when they started, and whether anything is getting worse?",
+    "SOON": (
+        "What you're describing ({flags}) should be checked by your primary care team. Please book a visit in the next "
+        "few days rather than waiting."
+    ),
+    "ROUTINE": (
+        "I didn't pick up any warning signs in what you described. If anything changes or gets worse, tell me or "
+        "contact your care team."
+    ),
+    "NEEDS_INFO": (
+        "Can you tell me a bit more - what symptoms you're noticing, when they started, and whether anything is "
+        "getting worse?"
+    ),
 }
-CRISIS_REPLY = "I'm really glad you told me. You deserve support right now: please call or text 988 (Suicide & Crisis Lifeline), or call 911 if you are in immediate danger."
+CRISIS_REPLY = (
+    "I'm really glad you told me. You deserve support right now: please call or text 988 (Suicide & Crisis Lifeline), "
+    "or call 911 if you are in immediate danger."
+)
 
 BANNER = {
-    "EMERGENCY": "### Call 911 or go to the nearest emergency department now\nDo not wait for an appointment, and do not drive yourself.",
+    "EMERGENCY": (
+        "### Call 911 or go to the nearest emergency department now\nDo not wait for an appointment, and do not drive "
+        "yourself."
+    ),
     "URGENT": "### This should be looked at today\nA short delay can change the outcome.",
     "SOON": "### Please don't put this off\nBook a primary care visit within the next few days.",
     "ROUTINE": "### No warning signs came up\nYou can still book a routine visit if you'd like one.",
@@ -30,9 +48,17 @@ BANNER = {
 }
 # Fallback when a later message has no model text and no new flags (e.g. "can it wait?").
 STILL = {
-    "EMERGENCY": "What you described earlier still needs emergency care now. Please call 911 or go to the emergency department.",
-    "URGENT": "What you described earlier still needs to be seen today, even if it feels minor. A short delay can change the outcome.",
-    "SOON": "What you described earlier should still be checked within the next few days. I'll help you book before we finish.",
+    "EMERGENCY": (
+        "What you described earlier still needs emergency care now. Please call 911 or go to the emergency department."
+    ),
+    "URGENT": (
+        "What you described earlier still needs to be seen today, even if it feels minor. A short delay can change the "
+        "outcome."
+    ),
+    "SOON": (
+        "What you described earlier should still be checked within the next few days. I'll help you book before we "
+        "finish."
+    ),
 }
 # The action a reply must name at each level. A more urgent instruction also counts.
 ACTION = {
@@ -101,7 +127,9 @@ def update(session: Session, user_text: str, triage: Triage, visible: str) -> Se
     return session
 
 
-def next_step(session: Session, scheduler: Scheduler, final: bool, now: datetime | None = None) -> tuple[str, list[dict]]:
+def next_step(
+    session: Session, scheduler: Scheduler, final: bool, now: datetime | None = None
+) -> tuple[str, list[dict]]:
     """Banner text plus bookable slots.
 
     EMERGENCY: banner at once, never an appointment in place of emergency care.
@@ -120,9 +148,14 @@ def next_step(session: Session, scheduler: Scheduler, final: bool, now: datetime
     if level == "URGENT":
         slots = scheduler.find_slots("URGENT", now)
         if slots:
-            banner += "\n\nPick a same-day time below. If none works, go to urgent care or the emergency department today."
+            banner += (
+                "\n\nPick a same-day time below. If none works, go to urgent care or the emergency department today."
+            )
         else:
-            banner += "\n\nNo same-day primary care times are left. Please go to urgent care or the emergency department today."
+            banner += (
+                "\n\nNo same-day primary care times are left. Please go to urgent care or the emergency department "
+                "today."
+            )
         return banner, slots
     if final and level in ("SOON", "ROUTINE"):
         return banner, scheduler.find_slots(level, now)

@@ -46,7 +46,7 @@ def load(model_id: str | None = None, adapter_id: str | None = None) -> bool:
 @gpu
 def generate(messages: list[dict], max_new_tokens: int = 220) -> str:
     """Greedy decoding: the same symptoms should always get the same triage."""
-    if _model is None:
+    if _model is None or _tok is None:
         return ""
     inputs = _tok.apply_chat_template(
         messages, add_generation_prompt=True, return_tensors="pt", return_dict=True

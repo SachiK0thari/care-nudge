@@ -1,0 +1,19 @@
+# Tool settings only. The app and the Space install from requirements.txt.
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+# Colab/Kaggle setup cells (pip installs, one-line shell-style commands), not library code.
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# SYSTEM_PROMPT is one triple-quoted string the model was trained on; wrapping it would change the text.
+"src/carenudge/prompts.py" = ["E501"]
+
+[tool.mypy]
+files = ["src"]
+python_version = "3.12"
+ignore_missing_imports = true

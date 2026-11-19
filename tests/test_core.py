@@ -90,7 +90,8 @@ def test_model_can_escalate_beyond_rules():
 
 def test_flags_are_not_listed_twice_when_rules_agree_or_win():
     text = "I keep seeing white flashes in front of my right eye."
-    tag = '<triage>{{"level": "{}", "red_flags": ["new flashes of light", "sudden increase in floaters"], "concern": "x"}}</triage>\nBe seen.'
+    flags = '["new flashes of light", "sudden increase in floaters"]'
+    tag = '<triage>{{"level": "{}", "red_flags": ' + flags + ', "concern": "x"}}</triage>\nBe seen.'
     for level in ("SOON", "URGENT"):  # the rules win, then tie
         triage, visible = policy.decide(text, tag.format(level))
         assert triage.red_flags == ["new flashes or floaters"]
@@ -125,7 +126,8 @@ def test_next_step_by_level():
 
 
 def test_reply_that_holds_the_level_still_names_the_next_step():
-    raw = '<triage>{"level": "EMERGENCY", "red_flags": [], "concern": "x"}</triage>\nI know it\'s inconvenient, but this isn\'t something to put off.'
+    raw = ('<triage>{"level": "EMERGENCY", "red_flags": [], "concern": "x"}</triage>\n'
+           "I know it's inconvenient, but this isn't something to put off.")
     _, visible = policy.decide("I'm really busy this week. Can it wait?", raw, prior_level="EMERGENCY")
     assert visible.startswith("I know it's inconvenient") and "911" in visible
     assert policy.ensure_action("URGENT", "Please be seen today.") == "Please be seen today."  # nothing added

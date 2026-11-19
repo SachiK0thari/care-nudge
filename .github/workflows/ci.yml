@@ -13,7 +13,11 @@ jobs:
         with:
           python-version: "3.12"
       # The light setup: no PyTorch. Enough for the tests, the dataset build and the rules-only evaluation.
-      - run: pip install pyyaml pytest tqdm
+      - run: pip install pyyaml pytest tqdm ruff mypy
+      - name: Lint
+        run: ruff check .
+      - name: Type check
+        run: mypy
       - run: pytest -q
       - name: Build the dataset
         run: python scripts/build_dataset.py

@@ -7,3 +7,5 @@ bitsandbytes; platform_system == "Linux"
 huggingface_hub>=2.0
 pyyaml
 pytest
+ruff
+mypy

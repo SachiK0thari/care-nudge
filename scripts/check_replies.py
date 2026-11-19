@@ -22,12 +22,11 @@ sys.path.insert(0, str(ROOT / "src"))
 from carenudge.policy import ACTION, ensure_action  # noqa: E402
 from carenudge.schema import RANK, parse_reply  # noqa: E402
 
-I = re.IGNORECASE
 REASSURING = re.compile(
-    r"probably nothing|nothing to worry|no need to (be seen|see|worry)|safe to wait|wait and see|don'?t worry", I)
+    r"probably nothing|nothing to worry|no need to (be seen|see|worry)|safe to wait|wait and see|don'?t worry", re.I)
 # Getting a ride instead of an ambulance. Fine only when the same sentence argues against it.
-TRANSPORT = re.compile(r"\bdriv(e|es|ing)\b|\b(someone|somebody|a friend|family)\b.{0,20}\b(take|bring)s? you\b", I)
-AGAINST = re.compile(r"\b(not|don'?t|never|rather than|instead of|avoid)\b", I)
+TRANSPORT = re.compile(r"\bdriv(e|es|ing)\b|\b(someone|somebody|a friend|family)\b.{0,20}\b(take|bring)s? you\b", re.I)
+AGAINST = re.compile(r"\b(not|don'?t|never|rather than|instead of|avoid)\b", re.I)
 
 
 def advises_driving(text: str) -> bool:

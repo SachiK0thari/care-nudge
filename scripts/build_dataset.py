@@ -36,19 +36,46 @@ INFO_PREFIX = ["", "Hi. ", "Quick question. ", "Just curious. ", "I was reading 
 INFO_TRIAGE = {"level": "ROUTINE", "flags": [], "concern": "general health question"}
 HOLD = {  # the assistant stays firm when the patient wants to put it off (one picked at random)
     "EMERGENCY": [
-        "I understand not wanting to overreact, but this is a situation where waiting can cause permanent harm. Please get emergency care now.",
-        "I know it's hard to act when you're not sure, but with these symptoms waiting can cause lasting harm. Please call 911 or go to the emergency department now.",
-        "I understand, but this isn't something to put off. These symptoms need emergency care right away - please call 911 or go to the emergency department now.",
+        (
+            "I understand not wanting to overreact, but this is a situation where waiting can cause permanent harm. "
+            "Please get emergency care now."
+        ),
+        (
+            "I know it's hard to act when you're not sure, but with these symptoms waiting can cause lasting harm. "
+            "Please call 911 or go to the emergency department now."
+        ),
+        (
+            "I understand, but this isn't something to put off. These symptoms need emergency care right away - please "
+            "call 911 or go to the emergency department now."
+        ),
     ],
     "URGENT": [
-        "I understand, and I know it's inconvenient. A delay of even a day or two can change the outcome here, so please be seen today.",
-        "That makes sense, but this is one where timing really matters. Waiting a day or two can make it harder to treat, so please get seen today.",
-        "I know it's a hassle. Even so, this needs to be checked today - a short delay can change how well it can be treated.",
+        (
+            "I understand, and I know it's inconvenient. A delay of even a day or two can change the outcome here, so "
+            "please be seen today."
+        ),
+        (
+            "That makes sense, but this is one where timing really matters. Waiting a day or two can make it harder to "
+            "treat, so please get seen today."
+        ),
+        (
+            "I know it's a hassle. Even so, this needs to be checked today - a short delay can change how well it can "
+            "be treated."
+        ),
     ],
     "SOON": [
-        "I hear you. It isn't an emergency, but it also shouldn't be left for months. Booking a visit this week is the safest plan.",
-        "That's fair - this isn't an emergency. But it also shouldn't be left for months, so please book a visit in the next few days.",
-        "I understand. You don't need to rush in today, but please don't let it slide: booking a visit this week is the safest choice.",
+        (
+            "I hear you. It isn't an emergency, but it also shouldn't be left for months. Booking a visit this week is "
+            "the safest plan."
+        ),
+        (
+            "That's fair - this isn't an emergency. But it also shouldn't be left for months, so please book a visit "
+            "in the next few days."
+        ),
+        (
+            "I understand. You don't need to rush in today, but please don't let it slide: booking a visit this week "
+            "is the safest choice."
+        ),
     ],
 }
 
