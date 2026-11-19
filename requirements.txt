@@ -1,4 +1,5 @@
 # Runtime for the app (this is the file the Space installs; Gradio comes from sdk_version)
-torch>=2.8
-transformers>=5.0
-peft>=0.21
+# Exact versions the Space has run since its first build on 2026-11-17. The Space build caps torch at 2.13.0.
+torch==2.13.0
+transformers==5.23.0
+peft==0.21.3
