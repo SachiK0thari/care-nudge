@@ -132,3 +132,8 @@ def test_reply_that_holds_the_level_still_names_the_next_step():
     assert visible.startswith("I know it's inconvenient") and "911" in visible
     assert policy.ensure_action("URGENT", "Please be seen today.") == "Please be seen today."  # nothing added
     assert policy.ensure_action("ROUTINE", "Rest and fluids.") == "Rest and fluids."
+    # Naming the word "emergency" is not the same as telling them where to go.
+    assert "911" in policy.ensure_action("EMERGENCY", "This isn't an emergency.")
+    assert "today" in policy.ensure_action("URGENT", "It's not an emergency, but don't ignore it.")
+    for named in ("Go to the emergency department now.", "Head to the ER.", "Call 911."):
+        assert policy.ensure_action("EMERGENCY", named) == named

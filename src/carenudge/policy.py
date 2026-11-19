@@ -61,10 +61,12 @@ STILL = {
     ),
 }
 # The action a reply must name at each level. A more urgent instruction also counts.
+# Match the instruction, not the word: "this isn't an emergency" names no next step.
+_ER = r"911|988|emergency (department|room|care)|(?-i:\bER\b)"
 ACTION = {
-    "EMERGENCY": re.compile(r"\b(911|988|emergency)\b", re.I),
-    "URGENT": re.compile(r"\b(today|same[- ]day|911|emergency)\b", re.I),
-    "SOON": re.compile(r"\b(book\w*|visit|appointment|today|same[- ]day|911|emergency)\b", re.I),
+    "EMERGENCY": re.compile(rf"\b({_ER})", re.I),
+    "URGENT": re.compile(rf"\b(today|same[- ]day|urgent care|{_ER})", re.I),
+    "SOON": re.compile(rf"\b(book\w*|visit|appointment|today|same[- ]day|urgent care|{_ER})", re.I),
 }
 # Appended when the model's reply holds the level but leaves out what to do (seen on pushback turns).
 NEXT_STEP = {
