@@ -84,7 +84,14 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
 OVERDOSE = "possible overdose or poisoning"
 SELF_HARM = "thoughts of suicide or self-harm"
 _SELF_DOSE = re.compile(r"\bi\s+(just\s+)?(took|swallowed|ate|overdosed|od'?d)\b", I)
-_NEGATION = re.compile(r"\b(no|not|without|never|denies|haven'?t|hasn'?t|don'?t have)\b", I)
+# "no idea", "not sure" and the like are not denials of a symptom.
+_NEGATION = re.compile(
+    r"\b(no(?!\s+(idea|doubt|clue|way)\b)|not(?!\s+(sure|certain|kidding)\b)"
+    r"|without|denies|haven'?t|hasn'?t|don'?t have)\b", I)
+# "never had chest pain" is a denial; "never felt pain like this" is an intensifier.
+_NEVER = re.compile(r"\bnever\b", I)
+_INTENSIFIER = re.compile(r"\blike (this|that|it)\b|\bthis (bad|much|strong|severe)\b", I)
+_CLAUSE_BREAK = re.compile(r"[.;,!?]|\b(?:but|except|now|and then)\b", I)
 _INFANT = re.compile(r"\bnewborn\b|\b(\d{1,2})[\s-]*(day|week|wk)s?[\s-]*old\b|\b(1|2|one|two)[\s-]*months?[\s-]*old\b", I)
 _FEVER = re.compile(r"\bfever\b|\btemp(erature)?\b|\b10[0-5](\.\d)?\b|\b3[89]\.\d\b|feels hot", I)
 _URINARY = re.compile(r"\b(pee\w*|urin\w*|uti)\b", I)
@@ -93,8 +100,24 @@ _FLANK = re.compile(r"\b(flank|side|back)\b", I)
 
 def _negated(text: str, start: int) -> bool:
     """True when the match sits in a clause like 'no numbness or leg weakness'."""
-    clause = re.split(r"[.;,!?]", text[max(0, start - 40):start])[-1]
-    return bool(_NEGATION.search(clause))
+    clause = _CLAUSE_BREAK.split(text[max(0, start - 40):start])[-1]
+    if _NEGATION.search(clause):
+        return True
+    if _NEVER.search(clause):
+        sentence = re.split(r"[.;!?]", text[start:])[0]
+        return not _INTENSIFIER.search(clause + sentence)
+    return False
+
+
+def _fires(pattern: re.Pattern, text: str) -> bool:
+    """True if any match is not negated. Tries every start position, not just non-overlapping matches,
+    so in "no chest pain now, but earlier my chest felt tight" the second "chest" gets its own check."""
+    pos = 0
+    while (m := pattern.search(text, pos)) is not None:
+        if not _negated(text, m.start()):
+            return True
+        pos = m.start() + 1
+    return False
 
 
 def _young_infant(text: str) -> bool:
@@ -111,7 +134,7 @@ def check(text: str) -> Triage:
     level, flags, concern = "NEEDS_INFO", [], ""
     hits: list[tuple[str, str, str]] = []
     for rule_level, flag, rule_concern, pattern in _RULES:
-        if any(not _negated(text, m.start()) for m in pattern.finditer(text)):
+        if _fires(pattern, text):
             hits.append((rule_level, flag, rule_concern))
     if any(flag == OVERDOSE for _, flag, _ in hits) and _SELF_DOSE.search(text) and \
             not any(flag == SELF_HARM for _, flag, _ in hits):

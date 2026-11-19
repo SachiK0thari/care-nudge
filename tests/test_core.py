@@ -27,6 +27,11 @@ from carenudge.schema import Triage, parse_reply
     ("I took a whole bottle of pills", "EMERGENCY"),
     ("I don't want to live anymore", "EMERGENCY"),
     ("My husband collapsed and isn't responding", "EMERGENCY"),
+    # Words that used to count as negation and hid a real emergency.
+    ("I have no idea why but my chest feels crushed", "EMERGENCY"),
+    ("I've never felt pain like this in my chest", "EMERGENCY"),
+    ("Not sure if this matters but my face is drooping", "EMERGENCY"),
+    ("No chest pain now, but earlier my chest felt tight.", "EMERGENCY"),
 ])
 def test_rules_fire(text, level):
     assert rules.check(text).level == level
@@ -36,6 +41,8 @@ def test_rules_fire(text, level):
     "I've had the same couple of floaters for years. No flashes.",
     "My lower back is sore after moving furniture. No numbness between my legs.",
     "Mild cough, no shortness of breath and no chest pain.",
+    "I've never had chest pain, just a cough.",
+    "Without any shortness of breath or chest tightness.",
 ])
 def test_rules_respect_negation(text):
     assert rules.check(text).level == "NEEDS_INFO"
