@@ -21,7 +21,13 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
         r"\b(i'?m|i am|he'?s|she'?s|is|they'?re)\s+having\b.{0,20}\b(heart attack|stroke)\b", re.I)),
     ("EMERGENCY", "possible overdose or poisoning", "possible overdose or poisoning", re.compile(
         r"\b(took|swallowed|ate)\b.{0,30}\b(bottle|whole|all (of )?(my|the|his|her))\b.{0,20}"
-        r"\b(pills?|tablets?|meds|medications?)\b|\b(overdosed|od'?d)\b", re.I)),
+        r"\b(pills?|tablets?|meds|medications?)\b|\b(overdosed|od'?d)\b"
+        # A counted dose of 10 or more ("took about 20 extra strength Tylenol"), but not "took 20 mg".
+        r"|\b(took|swallowed|ate|taken)\b.{0,15}\b([1-9]\d+|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty"
+        r"|a dozen|dozens)\b(?!\s*(mg|milligrams?|mcg|ml|units?|days?|weeks?|hours?|minutes?)\b).{0,40}"
+        r"\b(pills?|tablets?|caps(ules)?|gummies|tylenol|acetaminophen|paracetamol|advil|motrin|ibuprofen|aleve"
+        r"|aspirin|benadryl|ambien|xanax|oxy\w*|percocet|vicodin|melatonin|sleeping pills?|of (my|his|her|the) \w+)\b",
+        re.I)),
     ("EMERGENCY", "collapsed or unresponsive", "possible loss of consciousness", re.compile(
         r"\b(collapsed|passed out|fainted|unresponsive|not responding|isn'?t responding|won'?t wake up)\b", re.I)),
     ("EMERGENCY", "stroke warning signs", "possible stroke or TIA", re.compile(
@@ -81,7 +87,6 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
 
 OVERDOSE = "possible overdose or poisoning"
 SELF_HARM = "thoughts of suicide or self-harm"
-_SELF_DOSE = re.compile(r"\bi\s+(just\s+)?(took|swallowed|ate|overdosed|od'?d)\b", re.I)
 # "no idea", "not sure" and the like are not denials of a symptom.
 _NEGATION = re.compile(
     r"\b(no(?!\s+(idea|doubt|clue|way)\b)|not(?!\s+(sure|certain|kidding)\b)"
@@ -135,10 +140,6 @@ def check(text: str) -> Triage:
     for rule_level, flag, rule_concern, pattern in _RULES:
         if _fires(pattern, text):
             hits.append((rule_level, flag, rule_concern))
-    if any(flag == OVERDOSE for _, flag, _ in hits) and _SELF_DOSE.search(text) and \
-            not any(flag == SELF_HARM for _, flag, _ in hits):
-        # The patient took it themselves: answer with the crisis line, not just the generic 911 reply.
-        hits.append(("EMERGENCY", SELF_HARM, "risk of self-harm"))
     if _young_infant(text) and _FEVER.search(text):
         hits.append(("EMERGENCY", "fever in a baby under 3 months", "possible serious infection in a young infant"))
     if re.search(r"\b(fever|chills)\b", text, re.I) and _URINARY.search(text) and _FLANK.search(text):

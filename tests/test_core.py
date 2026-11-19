@@ -58,13 +58,41 @@ def test_rules_ignore_questions(text):
     assert "says it's a heart attack or stroke" not in rules.check(text).red_flags
 
 
-def test_self_directed_overdose_gets_the_crisis_reply():
-    triage, visible = policy.decide("I took a whole bottle of pills", "")
-    assert triage.level == "EMERGENCY" and policy.SELF_HARM in triage.red_flags
-    assert "988" in visible
-    # Someone else's overdose is an emergency, not a crisis-line reply.
+@pytest.mark.parametrize("text, fires", [
+    # Found by the challenge set (data/challenge.yaml), so that message is no longer unseen.
+    ("I took about 20 extra strength Tylenol a few hours ago.", True),
+    ("I swallowed 15 of my sleeping pills", True),
+    ("my brother took like thirty advil", True),
+    ("I took 2 Tylenol for my headache.", False),
+    ("I took 20 mg of my blood pressure pill this morning.", False),
+    ("I've taken 10 days of antibiotics and still have a cough.", False),
+])
+def test_counted_overdose(text, fires):
+    assert (rules.OVERDOSE in rules.check(text).red_flags) is fires
+
+
+def test_overdose_is_an_emergency_first_and_offers_988():
+    for text in ("I took a whole bottle of pills", "I took about 20 extra strength Tylenol a few hours ago."):
+        triage, visible = policy.decide(text, "")
+        # Intent is not assumed: no self-harm flag unless the patient says so.
+        assert triage.level == "EMERGENCY" and triage.red_flags == [rules.OVERDOSE]
+        assert "Poison Control" in visible and "911" in visible and "988" in visible
+        session = policy.update(policy.Session(), text, triage, visible)
+        banner, _ = policy.next_step(session, MockScheduler(), final=False)
+        assert banner.startswith("### Call 911") and "Poison Control" in banner and "988" in banner
+        assert policy.SELF_HARM not in banner
+
+
+def test_overdose_with_self_harm_words_gets_the_crisis_path():
+    text = "I took all my pills because I want to die"
+    triage, visible = policy.decide(text, "")
+    assert set(triage.red_flags) == {rules.OVERDOSE, policy.SELF_HARM}
+    assert visible.startswith(policy.CRISIS_REPLY) and "Poison Control" in visible
+    banner, _ = policy.next_step(policy.update(policy.Session(), text, triage, visible), MockScheduler(), final=False)
+    assert banner.startswith("### Call or text 988") and "Poison Control" in banner
+    # Someone else's overdose: the same emergency path.
     other = rules.check("My toddler swallowed all of the pills in my purse")
-    assert other.level == "EMERGENCY" and policy.SELF_HARM not in other.red_flags
+    assert other.level == "EMERGENCY" and other.red_flags == [rules.OVERDOSE]
 
 
 def test_parse_reply_roundtrip_and_garbage():

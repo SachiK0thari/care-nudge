@@ -75,6 +75,14 @@ NEXT_STEP = {
     "SOON": "Please book a primary care visit in the next few days.",
 }
 CRISIS_BANNER = "### Call or text 988 now (Suicide & Crisis Lifeline)\nIf you are in immediate danger, call 911."
+# An overdose is a medical emergency first, whatever the intent: acetaminophen can harm the liver before any
+# symptoms. 988 is offered, not assumed; the self-harm flag is only set when the patient's own words say so.
+OVERDOSE_STEP = (
+    "Taking too much of a medicine can be dangerous even if you feel fine right now. "
+    "Please call 911 or Poison Control (1-800-222-1222) now."
+)
+OVERDOSE_988 = "If you took them on purpose or are thinking about hurting yourself, you can also call or text 988."
+OVERDOSE_REPLY = f"{OVERDOSE_STEP} {OVERDOSE_988}"
 
 
 @dataclass
@@ -103,6 +111,10 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     concern = rule.concern if rule_wins else (model.concern or rule.concern)
     if SELF_HARM in flags and (rule_wins or not visible):
         visible = CRISIS_REPLY
+        if rules.OVERDOSE in flags:
+            visible = f"{visible} {OVERDOSE_STEP}"
+    elif rules.OVERDOSE in flags and (rule_wins or not visible):
+        visible = OVERDOSE_REPLY
     elif not visible and RANK[level] < RANK[prior_level] and prior_level in STILL:
         visible = STILL[prior_level]
     elif rule_wins or not visible:
@@ -157,6 +169,8 @@ def next_step(
     level = session.level
     crisis = SELF_HARM in session.red_flags
     banner = CRISIS_BANNER if crisis else BANNER[level]
+    if rules.OVERDOSE in session.red_flags:
+        banner += "\n\n" + (OVERDOSE_STEP if crisis else OVERDOSE_REPLY)
     if session.red_flags:
         banner += "\n\n**Noted:** " + "; ".join(session.red_flags)
     if level == "EMERGENCY":

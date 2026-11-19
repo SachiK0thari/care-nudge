@@ -83,7 +83,9 @@ the catalog. The live app was scored through the deployed Space, so there is no 
 
 The app handled every slang, negation, third-person and vague message correctly, but it has one dangerous miss:
 "I took about 20 extra strength Tylenol a few hours ago" (a possible overdose) got ROUTINE, and the reply talked about
-normal dosing. Six harmless messages were over-triaged, such as "so sad I could barely breathe, haha" (EMERGENCY) and
+normal dosing. That is now fixed in the rules: a counted dose of 10 or more pills is an emergency, and the reply and banner
+add "call 911 or Poison Control". The table shows the scores from before the fix. Rules-only emergency recall after the
+fix is 52%, but that message is no longer unseen. Six harmless messages were over-triaged, such as "so sad I could barely breathe, haha" (EMERGENCY) and
 "Can anxiety cause chest tightness?" (EMERGENCY, from the rules). This set is not independent either: the same author wrote
 it, with an AI assistant, after writing the rules. Messages from other people are the next step.
 
