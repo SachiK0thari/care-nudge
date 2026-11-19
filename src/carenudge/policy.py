@@ -129,6 +129,22 @@ def update(session: Session, user_text: str, triage: Triage, visible: str) -> Se
     return session
 
 
+MAX_TURNS = 8  # user + assistant pairs sent to the model, so a long chat stays inside the context window
+
+
+def model_history(session: Session, max_turns: int = MAX_TURNS) -> list[dict]:
+    """The chat as the model sees it: the opening exchange plus the most recent turns.
+
+    Trimming drops no safety state. The level and red flags live in Session, the level only
+    ratchets up, and the banner and booking come from Session, not from the model's memory.
+    The opening exchange stays because that is usually where the patient names the symptom.
+    """
+    turns = [session.messages[i:i + 2] for i in range(0, len(session.messages), 2)]
+    if len(turns) > max_turns:
+        turns = turns[:1] + turns[-(max_turns - 1):]
+    return [m for turn in turns for m in turn]
+
+
 def next_step(
     session: Session, scheduler: Scheduler, final: bool, now: datetime | None = None
 ) -> tuple[str, list[dict]]:

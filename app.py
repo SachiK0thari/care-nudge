@@ -45,7 +45,8 @@ def respond(user_text: str, session: policy.Session):
     user_text = (user_text or "").strip()
     if not user_text:
         return _display(session), session, "", gr.skip(), gr.skip(), gr.skip()
-    prompt = [{"role": "system", "content": SYSTEM_PROMPT}, *session.messages,
+    # The model sees a trimmed history; the UI still shows every turn (see policy.model_history).
+    prompt = [{"role": "system", "content": SYSTEM_PROMPT}, *policy.model_history(session),
               {"role": "user", "content": user_text}]
     triage, visible = policy.decide(user_text, model.generate(prompt), prior_level=session.level)
     session = policy.update(session, user_text, triage, visible)

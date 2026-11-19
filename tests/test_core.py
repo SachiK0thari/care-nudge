@@ -137,3 +137,20 @@ def test_reply_that_holds_the_level_still_names_the_next_step():
     assert "today" in policy.ensure_action("URGENT", "It's not an emergency, but don't ignore it.")
     for named in ("Go to the emergency department now.", "Head to the ER.", "Call 911."):
         assert policy.ensure_action("EMERGENCY", named) == named
+
+
+def test_model_history_keeps_the_opening_and_recent_turns():
+    session = policy.Session()
+    first = Triage("URGENT", ["new flashes or floaters"], "possible retinal tear")
+    session = policy.update(session, "I keep seeing white flashes in my right eye.", first, "Please be seen today.")
+    for i in range(1, 12):
+        session = policy.update(session, f"follow-up {i}", Triage("NEEDS_INFO"), f"reply {i}")
+    history = policy.model_history(session)
+    assert len(session.messages) == 24 and len(history) == 2 * policy.MAX_TURNS
+    assert history[0]["content"].startswith("I keep seeing white flashes")  # the opening exchange stays
+    assert history[-2]["content"] == "follow-up 11" and history[2]["content"] == "follow-up 5"
+    assert [m["role"] for m in history] == ["user", "assistant"] * policy.MAX_TURNS
+    # Safety state is unaffected by trimming.
+    assert session.level == "URGENT" and session.red_flags == ["new flashes or floaters"]
+    short = policy.Session(messages=session.messages[:6])
+    assert policy.model_history(short) == short.messages
