@@ -15,8 +15,17 @@ I = re.IGNORECASE
 # (level, red-flag label, concern, pattern)
 _RULES: list[tuple[str, str, str, re.Pattern]] = [
     ("EMERGENCY", "chest pain or pressure", "possible heart attack", re.compile(
-        r"\bchest\b.{0,40}\b(pain|pressure|tight\w*|squeez\w*|crush\w*|heav\w+)\b"
-        r"|\b(pain|pressure|tight\w*|squeez\w*|crush\w*)\b.{0,25}\bchest\b", I)),
+        r"\bchest\b.{0,40}\b(pain\w*|pressure|hurt\w*|ach\w*|tight\w*|squeez\w*|crush\w*|heav\w+)\b"
+        r"|\b(pain\w*|pressure|hurt\w*|ach\w*|tight\w*|squeez\w*|crush\w*)\b.{0,25}\bchest\b", I)),
+    # First person or someone present, in the present tense: "what does a heart attack feel like?"
+    # and "my dad had a stroke in 2019" are not emergencies.
+    ("EMERGENCY", "says it's a heart attack or stroke", "possible heart attack or stroke", re.compile(
+        r"\b(i'?m|i am|he'?s|she'?s|is|they'?re)\s+having\b.{0,20}\b(heart attack|stroke)\b", I)),
+    ("EMERGENCY", "possible overdose or poisoning", "possible overdose or poisoning", re.compile(
+        r"\b(took|swallowed|ate)\b.{0,30}\b(bottle|whole|all (of )?(my|the|his|her))\b.{0,20}"
+        r"\b(pills?|tablets?|meds|medications?)\b|\b(overdosed|od'?d)\b", I)),
+    ("EMERGENCY", "collapsed or unresponsive", "possible loss of consciousness", re.compile(
+        r"\b(collapsed|passed out|fainted|unresponsive|not responding|isn'?t responding|won'?t wake up)\b", I)),
     ("EMERGENCY", "stroke warning signs", "possible stroke or TIA", re.compile(
         r"\b(face|mouth)\b.{0,30}\b(droop\w*|sagging)\b|\bslurr\w*"
         r"|\b(arm|leg|hand)\b.{0,30}\b(went|suddenly|sudden)\b.{0,20}\b(weak|numb)\b"
@@ -39,7 +48,8 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
         r"|\b(stools?|poop)\b.{0,40}\b(black|tarry)\b", I)),
     ("EMERGENCY", "thoughts of suicide or self-harm", "risk of self-harm", re.compile(
         r"kill(ing)? myself|suicid\w*|end(ing)? my life|hurt(ing)? myself"
-        r"|don'?t want to be alive|better off without me", I)),
+        r"|don'?t want to be alive|better off without me"
+        r"|don'?t want to (live|be here)( anymore)?|want to die|no reason to live", I)),
     ("EMERGENCY", "loss of bladder/bowel control or saddle numbness",
      "possible pressure on the spinal nerves", re.compile(
         r"(lost|loss of) .{0,20}control.{0,20}(bladder|bowel)|wet myself"
@@ -71,6 +81,9 @@ _RULES: list[tuple[str, str, str, re.Pattern]] = [
      re.compile(r"lost \w+ (pounds|lbs)|los(t|ing) (a lot of )?weight|dropping weight|night sweats", I)),
 ]
 
+OVERDOSE = "possible overdose or poisoning"
+SELF_HARM = "thoughts of suicide or self-harm"
+_SELF_DOSE = re.compile(r"\bi\s+(just\s+)?(took|swallowed|ate|overdosed|od'?d)\b", I)
 _NEGATION = re.compile(r"\b(no|not|without|never|denies|haven'?t|hasn'?t|don'?t have)\b", I)
 _INFANT = re.compile(r"\bnewborn\b|\b(\d{1,2})[\s-]*(day|week|wk)s?[\s-]*old\b|\b(1|2|one|two)[\s-]*months?[\s-]*old\b", I)
 _FEVER = re.compile(r"\bfever\b|\btemp(erature)?\b|\b10[0-5](\.\d)?\b|\b3[89]\.\d\b|feels hot", I)
@@ -100,6 +113,10 @@ def check(text: str) -> Triage:
     for rule_level, flag, rule_concern, pattern in _RULES:
         if any(not _negated(text, m.start()) for m in pattern.finditer(text)):
             hits.append((rule_level, flag, rule_concern))
+    if any(flag == OVERDOSE for _, flag, _ in hits) and _SELF_DOSE.search(text) and \
+            not any(flag == SELF_HARM for _, flag, _ in hits):
+        # The patient took it themselves: answer with the crisis line, not just the generic 911 reply.
+        hits.append(("EMERGENCY", SELF_HARM, "risk of self-harm"))
     if _young_infant(text) and _FEVER.search(text):
         hits.append(("EMERGENCY", "fever in a baby under 3 months", "possible serious infection in a young infant"))
     if re.search(r"\b(fever|chills)\b", text, I) and _URINARY.search(text) and _FLANK.search(text):

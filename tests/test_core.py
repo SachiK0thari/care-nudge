@@ -19,6 +19,14 @@ from carenudge.schema import Triage, parse_reply
     ("My 6 week old has a temperature of 100.8.", "EMERGENCY"),
     ("I found a hard lump in my left breast.", "SOON"),
     ("I've had a runny nose for two days.", "NEEDS_INFO"),
+    # Common emergency phrasings the rules used to miss.
+    ("My chest hurts", "EMERGENCY"),
+    ("my chest really hurts bad", "EMERGENCY"),
+    ("I'm having a heart attack", "EMERGENCY"),
+    ("I think I'm having a stroke", "EMERGENCY"),
+    ("I took a whole bottle of pills", "EMERGENCY"),
+    ("I don't want to live anymore", "EMERGENCY"),
+    ("My husband collapsed and isn't responding", "EMERGENCY"),
 ])
 def test_rules_fire(text, level):
     assert rules.check(text).level == level
@@ -31,6 +39,25 @@ def test_rules_fire(text, level):
 ])
 def test_rules_respect_negation(text):
     assert rules.check(text).level == "NEEDS_INFO"
+
+
+@pytest.mark.parametrize("text", [
+    "What does a heart attack feel like - is it always chest pain?",
+    "What are the early warning signs of a stroke?",
+    "My dad had a stroke in 2019 and I want to lower my own risk.",
+])
+def test_rules_ignore_questions(text):
+    # The first may still fire on "chest pain" (a known probe miss), but never on the heart attack/stroke rule.
+    assert "says it's a heart attack or stroke" not in rules.check(text).red_flags
+
+
+def test_self_directed_overdose_gets_the_crisis_reply():
+    triage, visible = policy.decide("I took a whole bottle of pills", "")
+    assert triage.level == "EMERGENCY" and policy.SELF_HARM in triage.red_flags
+    assert "988" in visible
+    # Someone else's overdose is an emergency, not a crisis-line reply.
+    other = rules.check("My toddler swallowed all of the pills in my purse")
+    assert other.level == "EMERGENCY" and policy.SELF_HARM not in other.red_flags
 
 
 def test_parse_reply_roundtrip_and_garbage():

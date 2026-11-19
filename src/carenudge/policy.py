@@ -9,7 +9,7 @@ from . import rules
 from .scheduler import Scheduler
 from .schema import RANK, Triage, more_urgent, parse_reply
 
-SELF_HARM = "thoughts of suicide or self-harm"
+SELF_HARM = rules.SELF_HARM
 
 # Used when the model gave nothing usable, or the rules outrank what it said.
 SAFE_REPLY = {
