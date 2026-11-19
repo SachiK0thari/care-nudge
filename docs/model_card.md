@@ -61,7 +61,7 @@ The data is synthetic, built by a script from a hand-written catalog of 27 scena
 
 ## Evaluation
 
-Held-out test split, 260 messages written with phrasings the model never saw. Under-triage means a warning sign that got a less urgent level than it needs. It is the number that matters most.
+Held-out test split: 260 conversations built from 54 patient phrasings the model never saw in training (2 per scenario), each wrapped in different openers, closers and conversation shapes. Under-triage means a warning sign that got a less urgent level than it needs. It is the number that matters most.
 
 | System | Accuracy | Under-triage | Emergency recall |
 |---|---|---|---|
@@ -76,6 +76,7 @@ On 12 informational questions it never trained on, the model answers all 12 with
 ## Limitations
 
 - **The test set shares authorship with the training set.** The phrasings are new, but the same person wrote both, from the same scenario list. Real patients will word things in ways neither covers, so these numbers overstate real-world performance.
+- **The rules were written with the same scenarios in view.** Their patterns were tuned against the same 27 scenarios, which partly explains why they never over-triage a test message. Expect more false alarms on other wording.
 - **Narrow coverage.** 27 scenarios is a small slice of medicine. Anything outside them is a guess.
 - **Pushback replies can drop the next step.** When a patient asks to wait, the model keeps the urgency level in all 44 test cases, but 13 of those replies don't restate what to do. The app appends the next step when that happens.
 - **English only, US emergency numbers.**
