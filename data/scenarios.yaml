@@ -537,6 +537,41 @@ scenarios:
       - "My calf has been fluttering under the skin now and then this week."
       - "My eyelid keeps doing a tiny flicker when I'm stressed and tired."
 
+  # ---- added 2026-11-20: mixed shaking + chest symptoms (the v4 model answered these like low blood sugar) ----
+  # The challenge set has "I can't stop shaking and my chest feels tight."; none of these copies or rewords it.
+  - id: shaking_chest_tightness
+    added: 2026-11-20
+    level: EMERGENCY
+    area: chest
+    concern: possible heart attack or other cardiac emergency
+    flags: [chest pressure or pain, shaking or trembling]
+    replies:
+      - "Chest tightness together with shaking or a racing heart can be a sign of a heart problem, and it's not something to try to settle at home first. Please call 911 now. Don't wait to see if it passes, and don't drive yourself."
+      - "Shaking with a tight or heavy feeling in the chest needs to be checked right away, because it can be a heart attack even when it feels like nerves or low sugar. Call 911 now rather than waiting or driving yourself."
+      - "When chest pressure comes with trembling, sweating, or a pounding heart, it can be a heart emergency. Please call 911 right now, even if you think it might be something else, and don't drive yourself to the hospital."
+    utterances:
+      - "I'm trembling all over and there's a tight band across my chest."
+      - "My hands are shaking and my chest feels heavy, and my heart is pounding."
+      - "I suddenly got the shakes and now there's a squeezing feeling in my chest."
+      - "My whole body is shaky and it feels like something is pressing on my chest."
+      - "I'm jittery and sweaty and my chest has gone tight in the last half hour."
+  - id: caffeine_jitters
+    added: 2026-11-20
+    level: ROUTINE
+    area: general
+    concern: jitteriness from caffeine
+    flags: []
+    replies:
+      - "Feeling jittery or shaky after a lot of caffeine is common and usually passes within a few hours. Skip more coffee or energy drinks today, drink some water, and eat something. If you get chest pain or pressure, trouble breathing, or feel faint, get emergency care right away."
+      - "Shakiness after several coffees or an energy drink is usually just the caffeine wearing off slowly. Water, a snack, and no more caffeine today usually help. If chest pain, pressure, or fainting comes with it, call 911."
+      - "Too much caffeine often causes jitters, a fast heartbeat for a while, and trouble sitting still. It usually settles in a few hours; cut back today and have some water and food. Get emergency care right away for chest pain or pressure, fainting, or trouble breathing."
+    utterances:
+      - "I've had four cups of coffee and now my hands are a bit shaky, otherwise I feel fine."
+      - "I'm jittery after an energy drink this morning, no chest pain or anything, just restless."
+      - "Too much espresso today, I feel wired and a little trembly but nothing hurts."
+      - "My hands are shaky after a big iced coffee on an empty stomach, I feel okay otherwise."
+      - "I'm buzzing and a bit shaky after three coffees, no other symptoms."
+
 # Informational questions: nobody is reporting a symptom. build_dataset.py writes
 # them to data/probes.jsonl. Never train on these; they test whether the assistant
 # escalates a question ABOUT a warning sign as if the person HAD it.
@@ -599,7 +634,9 @@ info_questions:
   - questions: ["What are the signs of a concussion?", "How do you know if a head injury is serious?"]
     reply: "Common concussion signs include headache, dizziness, confusion, and feeling foggy or slowed down after a blow to the head. Warning signs that need emergency care are repeated vomiting, worsening headache, unusual drowsiness, seizures, or one pupil larger than the other. Mild symptoms should still be checked by a doctor."
   - questions: ["What are the symptoms of low blood sugar?", "How do you know if blood sugar is too low?"]
-    reply: "Low blood sugar can cause shakiness, sweating, hunger, a fast heartbeat, irritability, and confusion. For people with diabetes, fast-acting sugar like juice or glucose tablets usually helps within 15 minutes. If someone is confused, can't eat or drink, or passes out, call 911."
+    # Rewritten 2026-11-20: the old answer ("fast-acting sugar... call 911 if confused") was copied by the v4 model
+    # into a reply to shaking with chest tightness. Sugar is for a known low in someone with diabetes, never for chest symptoms.
+    reply: "Low blood sugar can cause shakiness, sweating, hunger, a fast heartbeat, irritability, and confusion. For someone with diabetes who has checked and knows their sugar is low, fast-acting sugar like juice or glucose tablets usually helps within 15 minutes. Chest pain or pressure is not a low-sugar symptom to treat at home: call 911 for that, and also if someone is confused, can't eat or drink, or passes out."
   - questions: ["When should someone go to the hospital for an asthma attack?", "How do you know if an asthma attack is serious?"]
     reply: "An asthma attack is serious when a rescue inhaler isn't helping, the person is too breathless to speak in full sentences, or their lips or fingertips turn bluish. Those signs mean they should call 911. Milder attacks that respond to the inhaler should still be followed up with the care team."
   - questions: ["What are the symptoms of carbon monoxide poisoning?", "How would I know if there's carbon monoxide in my home?"]
