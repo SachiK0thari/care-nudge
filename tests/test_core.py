@@ -167,6 +167,25 @@ def test_reply_that_holds_the_level_still_names_the_next_step():
         assert policy.ensure_action("EMERGENCY", named) == named
 
 
+def test_emergency_reply_never_suggests_driving():
+    # The fine-tuned model's reply on the challenge set, word for word.
+    raw = ('<triage>{"level": "EMERGENCY", "red_flags": ["trembling", "chest pressure or pain"], '
+           '"concern": "possible heart issue"}</triage>\n'
+           "Trembling, sweating, a fast heartbeat, and chest pressure can be a severe allergic reaction or a sign of a "
+           "heart problem. These symptoms can get worse quickly. Please call 911 now, or drive to the emergency "
+           "department if you are too unwell to drive.")
+    _, visible = policy.decide("I can't stop shaking and my chest feels tight.", raw)
+    assert visible.startswith("Trembling, sweating") and "get worse quickly." in visible
+    assert "drive" not in visible and "911" in visible
+    # Arguing against driving is the right advice and stays.
+    kept = "Call 911 now. Do not drive yourself to the hospital."
+    assert policy.guard("EMERGENCY", kept) == kept
+    assert policy.guard("EMERGENCY", "Call 911, and don't let a friend take you.") == (
+        "Call 911, and don't let a friend take you.")
+    # Below emergency, driving to urgent care is fine.
+    assert policy.guard("URGENT", "Drive to urgent care today.") == "Drive to urgent care today."
+
+
 def test_model_history_keeps_the_opening_and_recent_turns():
     session = policy.Session()
     first = Triage("URGENT", ["new flashes or floaters"], "possible retinal tear")

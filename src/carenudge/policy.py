@@ -74,6 +74,11 @@ NEXT_STEP = {
     "URGENT": "Please arrange to be seen today.",
     "SOON": "Please book a primary care visit in the next few days.",
 }
+# Getting a ride instead of an ambulance. Fine only when the same sentence argues against it
+# ("don't drive yourself"). Seen once on the challenge set: "call 911 now, or drive to the emergency department".
+TRANSPORT = re.compile(r"\bdriv(e|es|ing)\b|\b(someone|somebody|a friend|family)\b.{0,20}\b(take|bring)s? you\b", re.I)
+AGAINST = re.compile(r"\b(not|don'?t|never|rather than|instead of|avoid)\b", re.I)
+_SENTENCE = re.compile(r"(?<=[.!?])\s+")
 CRISIS_BANNER = "### Call or text 988 now (Suicide & Crisis Lifeline)\nIf you are in immediate danger, call 911."
 # An overdose is a medical emergency first, whatever the intent: acetaminophen can harm the liver before any
 # symptoms. 988 is offered, not assumed; the self-harm flag is only set when the patient's own words say so.
@@ -120,7 +125,28 @@ def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO
     elif rule_wins or not visible:
         # Never show reassuring model text next to a rule-level escalation.
         visible = SAFE_REPLY[level].format(flags=", ".join(flags) or "your symptoms")
-    return Triage(level, flags, concern), ensure_action(level, visible)
+    return Triage(level, flags, concern), guard(level, visible)
+
+
+def guard(level: str, visible: str) -> str:
+    """The last pass over what the patient sees, whatever the model wrote."""
+    if level == "EMERGENCY":
+        visible = drop_driving(visible)  # may remove the 911 line too; ensure_action puts one back
+    return ensure_action(level, visible)
+
+
+def _drives(sentence: str) -> bool:
+    match = TRANSPORT.search(sentence)
+    return match is not None and not AGAINST.search(sentence[:match.start()])
+
+
+def advises_driving(text: str) -> bool:
+    return any(_drives(s) for s in _SENTENCE.split(text))
+
+
+def drop_driving(visible: str) -> str:
+    """An emergency means an ambulance: remove any sentence that offers driving instead."""
+    return " ".join(s for s in _SENTENCE.split(visible) if not _drives(s))
 
 
 def ensure_action(level: str, visible: str) -> str:

@@ -1,0 +1,454 @@
+{
+  "rules": {
+    "n": 45,
+    "accuracy": 0.35555555555555557,
+    "under_triage": 0.28888888888888886,
+    "over_triage": 0.044444444444444446,
+    "emergency_recall": 0.5238095238095238,
+    "urgent_plus_recall": 0.52
+  },
+  "model": {
+    "n": 45,
+    "accuracy": 0.8666666666666667,
+    "under_triage": 0.022222222222222223,
+    "over_triage": 0.08888888888888889,
+    "emergency_recall": 0.9523809523809523,
+    "urgent_plus_recall": 0.96,
+    "format_ok": 1.0
+  },
+  "model+rules": {
+    "n": 45,
+    "accuracy": 0.8444444444444444,
+    "under_triage": 0.0,
+    "over_triage": 0.13333333333333333,
+    "emergency_recall": 1.0,
+    "urgent_plus_recall": 1.0
+  },
+  "by_category": {
+    "slang": {
+      "rules": {
+        "n": 9,
+        "accuracy": 0.2222222222222222,
+        "under_triage": 0.7777777777777778,
+        "over_triage": 0.0,
+        "emergency_recall": 0.16666666666666666,
+        "urgent_plus_recall": 0.2222222222222222
+      },
+      "model": {
+        "n": 9,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      },
+      "model+rules": {
+        "n": 9,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      }
+    },
+    "negation": {
+      "rules": {
+        "n": 8,
+        "accuracy": 0.5,
+        "under_triage": 0.125,
+        "over_triage": 0.0,
+        "emergency_recall": 0.75,
+        "urgent_plus_recall": 0.75
+      },
+      "model": {
+        "n": 8,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      },
+      "model+rules": {
+        "n": 8,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      }
+    },
+    "third_person": {
+      "rules": {
+        "n": 7,
+        "accuracy": 0.5714285714285714,
+        "under_triage": 0.42857142857142855,
+        "over_triage": 0.0,
+        "emergency_recall": 0.5,
+        "urgent_plus_recall": 0.5714285714285714
+      },
+      "model": {
+        "n": 7,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      },
+      "model+rules": {
+        "n": 7,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      }
+    },
+    "vague": {
+      "rules": {
+        "n": 5,
+        "accuracy": 0.8,
+        "under_triage": 0.2,
+        "over_triage": 0.0,
+        "emergency_recall": 0.6666666666666666,
+        "urgent_plus_recall": 0.6666666666666666
+      },
+      "model": {
+        "n": 5,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      },
+      "model+rules": {
+        "n": 5,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      }
+    },
+    "informational": {
+      "rules": {
+        "n": 6,
+        "accuracy": 0.0,
+        "under_triage": 0.0,
+        "over_triage": 0.3333333333333333,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      },
+      "model": {
+        "n": 6,
+        "accuracy": 1.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      },
+      "model+rules": {
+        "n": 6,
+        "accuracy": 0.6666666666666666,
+        "under_triage": 0.0,
+        "over_triage": 0.3333333333333333,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      }
+    },
+    "benign_scary": {
+      "rules": {
+        "n": 6,
+        "accuracy": 0.0,
+        "under_triage": 0.0,
+        "over_triage": 0.0,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      },
+      "model": {
+        "n": 6,
+        "accuracy": 0.5,
+        "under_triage": 0.0,
+        "over_triage": 0.3333333333333333,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      },
+      "model+rules": {
+        "n": 6,
+        "accuracy": 0.5,
+        "under_triage": 0.0,
+        "over_triage": 0.3333333333333333,
+        "emergency_recall": 0.0,
+        "urgent_plus_recall": 0.0
+      }
+    },
+    "out_of_catalog": {
+      "rules": {
+        "n": 4,
+        "accuracy": 0.5,
+        "under_triage": 0.25,
+        "over_triage": 0.0,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      },
+      "model": {
+        "n": 4,
+        "accuracy": 0.25,
+        "under_triage": 0.25,
+        "over_triage": 0.5,
+        "emergency_recall": 0.5,
+        "urgent_plus_recall": 0.5
+      },
+      "model+rules": {
+        "n": 4,
+        "accuracy": 0.5,
+        "under_triage": 0.0,
+        "over_triage": 0.5,
+        "emergency_recall": 1.0,
+        "urgent_plus_recall": 1.0
+      }
+    }
+  },
+  "errors": [
+    {
+      "category": "slang",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "cant feel my arm rite and my words r coming out all wrong"
+    },
+    {
+      "category": "slang",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "my face went all lopsided in the mirror like 10 min ago"
+    },
+    {
+      "category": "slang",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "threw up twice and it looked like coffee grinds??"
+    },
+    {
+      "category": "slang",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "cant breath right, feels like im sucking air thru a straw"
+    },
+    {
+      "category": "slang",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "lips r puffing up after the shrimp and my throat feels weird"
+    },
+    {
+      "category": "slang",
+      "gold": "URGENT",
+      "rules": "NEEDS_INFO",
+      "model": "URGENT",
+      "model+rules": "URGENT",
+      "text": "gettin these zigzag sparkly lights in my eye and a bunch of new black dots"
+    },
+    {
+      "category": "slang",
+      "gold": "URGENT",
+      "rules": "NEEDS_INFO",
+      "model": "URGENT",
+      "model+rules": "URGENT",
+      "text": "my legs all puffed up on one side n the calf is hot and sore"
+    },
+    {
+      "category": "negation",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "I never get headaches, and this one hit like a bat to the head out of nowhere."
+    },
+    {
+      "category": "negation",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "No chest pain, no shortness of breath, just a stuffy nose and sneezing."
+    },
+    {
+      "category": "negation",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "I don't have any numbness or weakness, my lower back is just stiff after gardening."
+    },
+    {
+      "category": "negation",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "Nothing is swollen and I can breathe fine, I just have an itchy patch on my arm from a new soap."
+    },
+    {
+      "category": "third_person",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "My dad is clutching his chest and sweating through his shirt."
+    },
+    {
+      "category": "third_person",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "My son got stung by a bee and now his tongue is getting big."
+    },
+    {
+      "category": "third_person",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "My teenager told me she's been thinking about ending it all."
+    },
+    {
+      "category": "vague",
+      "gold": "EMERGENCY",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "Everything went dark in my left eye a few minutes ago and it hasn't come back."
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "How do I know if a headache is serious enough to go to the ER?"
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "What's the difference between a TIA and a stroke?"
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "EMERGENCY",
+      "model": "ROUTINE",
+      "model+rules": "EMERGENCY",
+      "text": "Can anxiety cause chest tightness?"
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "What are the signs of a blood clot in the leg?"
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "Is it normal to get more floaters as you get older?"
+    },
+    {
+      "category": "informational",
+      "gold": "ROUTINE",
+      "rules": "SOON",
+      "model": "ROUTINE",
+      "model+rules": "SOON",
+      "text": "How much does a mole have to change before I should get it checked?"
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "NEEDS_INFO",
+      "model+rules": "NEEDS_INFO",
+      "text": "My heart attack risk calculator said 5%. Is that good?"
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "My chest muscles are sore from doing push-ups for the first time."
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "EMERGENCY",
+      "model+rules": "EMERGENCY",
+      "text": "That movie was so sad I was crying until I could barely breathe, haha."
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "My dad's stroke rehab appointment got moved. Can I reschedule it for him?"
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "SOON",
+      "model+rules": "SOON",
+      "text": "My doctor said my chest x-ray was clear. Can I go back to the gym?"
+    },
+    {
+      "category": "benign_scary",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "ROUTINE",
+      "model+rules": "ROUTINE",
+      "text": "I'm dying to know when my flu shot appointment is."
+    },
+    {
+      "category": "out_of_catalog",
+      "gold": "EMERGENCY",
+      "rules": "EMERGENCY",
+      "model": "ROUTINE",
+      "model+rules": "EMERGENCY",
+      "text": "I took about 20 extra strength Tylenol a few hours ago."
+    },
+    {
+      "category": "out_of_catalog",
+      "gold": "SOON",
+      "rules": "NEEDS_INFO",
+      "model": "URGENT",
+      "model+rules": "URGENT",
+      "text": "I have a rash shaped like a bullseye on my thigh, a week after hiking."
+    },
+    {
+      "category": "out_of_catalog",
+      "gold": "ROUTINE",
+      "rules": "NEEDS_INFO",
+      "model": "SOON",
+      "model+rules": "SOON",
+      "text": "I touched the oven rack and have a small red spot on my finger. It's not blistered."
+    }
+  ],
+  "under_triaged_examples": []
+}

@@ -16,6 +16,8 @@ reports/*
 !reports/eval_rules_challenge.json
 !reports/eval_space_challenge.json
 !reports/outputs_space_challenge.jsonl
+!reports/eval_finetuned_challenge.json
+!reports/outputs_finetuned_challenge.jsonl
 data/*.jsonl
 .env
 
