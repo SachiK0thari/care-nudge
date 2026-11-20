@@ -46,6 +46,9 @@ Synthetic data only; do not enter real health information.
 - A last pass checks the reply text before it's shown. Emergency replies never suggest driving instead of calling 911,
   and an emergency reply that only says "call 911 *if* things get worse" is replaced with a plain instruction. Phone
   numbers the app didn't supply are removed, and a wrong Poison Control number is corrected.
+- A first message that only asks to wait ("I'm really busy this week. Can it wait?") gets a question back about
+  what's going on. The model can't do this reliably (see below), so the app does it when neither the model nor the rules
+  found a warning sign.
 - Emergencies get a 911 banner straight away. Urgent cases get same-day times right away.
   For anything that can wait a few days, a booking card appears when the chat ends.
   Booking goes through a mock scheduler that returns FHIR-shaped `Appointment` payloads.
@@ -122,6 +125,13 @@ that sentence, but its reply to the same message suggested trying sugar first an
 or can't keep your food down". The app now replaces emergency replies that only mention 911 as a condition, so the patient
 sees a plain "call 911 now". Across 1,277 saved replies from every model version, the hedge and phone-number checks changed 7,
 all of them hedges or wrong details. One was a wrong Poison Control number from the current model, which the app now corrects.
+
+A fifth training run was tried and not shipped. It added a shaking-with-chest-tightness scenario, a caffeine look-alike,
+a safer low-blood-sugar answer, and 20 conversations where the first message is "can it wait?". On the 314 shared test
+rows it scored worse than the current model: 95.2% vs 96.8% accuracy, and one under-triage the rules did not catch
+(postmenopausal bleeding, then "Maybe I'll give it a few days?", answered "This is usually a minor upset"). The likely
+cause is the lone "can it wait?" rows, which teach the model to answer a pushback without looking back at the symptom.
+That case is now handled by the app instead, and those rows are no longer in the training data.
 
 This set is not independent either: the same author wrote it, with an AI assistant, after writing the rules. A set
 written by other people would only be worth adding with clinically reviewed gold levels, so it has not been done.

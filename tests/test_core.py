@@ -260,3 +260,26 @@ def test_model_history_keeps_the_opening_and_recent_turns():
     assert session.level == "URGENT" and session.red_flags == ["new flashes or floaters"]
     short = policy.Session(messages=session.messages[:6])
     assert policy.model_history(short) == short.messages
+
+
+def test_a_lone_pushback_gets_a_question_back():
+    # Live, v4 answered this opening message as ROUTINE with an invented clinic number.
+    routine = '<triage>{"level": "ROUTINE", "red_flags": [], "concern": ""}</triage>\nCall us at 617-555-0199.'
+    for text in ["I'm really busy this week. Can it wait?", "Hi. Can this wait until next week?",
+                 "Do I really need to come in?", "It's probably nothing. Can I just wait and see?"]:
+        triage, visible = policy.decide(text, routine, first_turn=True)
+        assert triage.level == "NEEDS_INFO" and visible == policy.LONE_PUSHBACK_REPLY, text
+
+    # Not the opening message: the earlier symptom still decides (and STILL holds the line).
+    _, visible = policy.decide("Can it wait?", "", prior_level="URGENT", first_turn=False)
+    assert visible == policy.STILL["URGENT"]
+    # A symptom in the same message keeps its level, whether the rules or the model found it.
+    triage, _ = policy.decide("My chest hurts. Can it wait?", routine, first_turn=True)
+    assert triage.level == "EMERGENCY"
+    soon = '<triage>{"level": "SOON", "red_flags": ["new lump"], "concern": ""}</triage>\nPlease book a visit.'
+    triage, visible = policy.decide("Found a lump in my armpit, can it wait?", soon, first_turn=True)
+    assert triage.level == "SOON" and "book" in visible
+    # A plain first message is untouched.
+    triage, _ = policy.decide("I have a mild cold.", routine.replace("Call us at 617-555-0199.", "Rest up."),
+                              first_turn=True)
+    assert triage.level == "ROUTINE"

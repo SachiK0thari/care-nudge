@@ -38,21 +38,6 @@ PUSHBACK_AGAIN = [
     "Are you sure? I'd rather not make a fuss over nothing.",
     "Honestly I just don't have time for this today.",
 ]
-# A pushback as the opening message: there is nothing to wait on yet, so the assistant asks instead of answering.
-# The v4 model answered a lone "Can it wait?" as ROUTINE and invented a clinic phone number.
-LONE_PUSHBACK_EXTRA = [
-    "Can this wait until next week?",
-    "Is it okay if I just wait a few days?",
-    "Do I really need to come in?",
-    "Can I skip it?",
-]
-LONE_PUSHBACK_REPLY = [
-    "I can help you decide. What's going on - what symptoms are you thinking of waiting on, and when did they start?",
-    "Happy to help with that. Can you tell me what you'd like to wait on - what you're noticing and how long it's been "
-    "going on?",
-    "That depends on what's happening. What symptoms are you having, when did they start, and is anything getting "
-    "worse?",
-]
 INFO_PREFIX = ["", "Hi. ", "Quick question. ", "Just curious. ", "I was reading about this. "]
 INFO_TRIAGE = {"level": "ROUTINE", "flags": [], "concern": "general health question"}
 HOLD = {  # the assistant stays firm when the patient wants to put it off (one picked at random)
@@ -175,17 +160,6 @@ def info_rows(spec: dict, rng: random.Random) -> list[dict]:
     return rows
 
 
-def lone_pushback_rows(rng: random.Random) -> list[dict]:
-    """Training rows where the very first message asks to wait: NEEDS_INFO and a question back."""
-    rows = []
-    for text in PUSHBACK + PUSHBACK_AGAIN + LONE_PUSHBACK_EXTRA:
-        for prefix in rng.sample(["", "Hi. ", "Hi, quick question. "], 2):
-            rows.append({"scenario": "lone_pushback", "level": "NEEDS_INFO", "shape": "lone_pushback",
-                         "messages": [sys_msg(), user(prefix + text),
-                                      assistant(Triage("NEEDS_INFO"), rng.choice(LONE_PUSHBACK_REPLY))]})
-    return rows
-
-
 def audit(train: list[dict]) -> None:
     """Look at the data before training on it: class balance and how often replies repeat."""
     def body(row: dict) -> str:  # final reply without the tag line or the opener
@@ -215,7 +189,6 @@ def main() -> None:
                 else:
                     train.append({**row, "messages": messages})
     train += info_rows(spec, rng)  # after the loop, so the test split's random draws are unchanged
-    train += lone_pushback_rows(random.Random(41))
     rng.shuffle(train)
     n_val = max(1, len(train) // 10)
     # informational questions (nobody is reporting a symptom): a probe set, never trained on

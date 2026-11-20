@@ -48,7 +48,8 @@ def respond(user_text: str, session: policy.Session):
     # The model sees a trimmed history; the UI still shows every turn (see policy.model_history).
     prompt = [{"role": "system", "content": SYSTEM_PROMPT}, *policy.model_history(session),
               {"role": "user", "content": user_text}]
-    triage, visible = policy.decide(user_text, model.generate(prompt), prior_level=session.level)
+    triage, visible = policy.decide(user_text, model.generate(prompt), prior_level=session.level,
+                                    first_turn=not session.messages)
     session = policy.update(session, user_text, triage, visible)
     banner, slots = policy.next_step(session, scheduler, final=False)
     return _display(session), session, "", banner, _slot_update(slots), gr.update(visible=bool(slots))

@@ -102,6 +102,17 @@ OVERDOSE_STEP = (
 )
 OVERDOSE_988 = "If you took them on purpose or are thinking about hurting yourself, you can also call or text 988."
 OVERDOSE_REPLY = f"{OVERDOSE_STEP} {OVERDOSE_988}"
+# A request to wait sent as the opening message: there is nothing to wait on yet. Live, v4 answered a lone
+# "I'm really busy this week. Can it wait?" as ROUTINE with an invented clinic number. Training on such rows (v5)
+# made the model ignore earlier symptoms on ordinary pushback turns, so this is handled here instead.
+_WAIT = re.compile(
+    r"\bcan (it|this|that|i) (just )?(wait|hold off)|\bwait and see\b|\b(give it|wait) (a few|a couple( of)?|some) "
+    r"(days|weeks)\b|\bdo i (really )?(need|have) to (come in|go in|be seen|see (a|the) doctor)|\bcan i (just )?skip\b"
+    r"|\bis it (ok|okay|fine) (if i|to) (just )?wait\b", re.I)
+LONE_PUSHBACK_WORDS = 15  # longer messages are likely to describe a symptom; leave those to the model
+LONE_PUSHBACK_REPLY = (
+    "I can help you decide. What's going on - what symptoms are you thinking of waiting on, and when did they start?"
+)
 
 
 @dataclass
@@ -113,10 +124,21 @@ class Session:
     messages: list[dict] = field(default_factory=list)  # what the model sees (tags included)
 
 
-def decide(user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO") -> tuple[Triage, str]:
+def is_lone_pushback(user_text: str) -> bool:
+    """An opening message that only asks to wait, naming no symptom (checked with the rules and the model)."""
+    return bool(_WAIT.search(user_text)) and len(user_text.split()) <= LONE_PUSHBACK_WORDS
+
+
+def decide(
+    user_text: str, raw_model_output: str, prior_level: str = "NEEDS_INFO", first_turn: bool = False
+) -> tuple[Triage, str]:
     rule = rules.check(user_text)
     parsed, visible = parse_reply(raw_model_output)
     model = parsed or Triage()
+    # Only when neither the rules nor the model found a warning sign, so a symptom in the message keeps its level.
+    if (first_turn and is_lone_pushback(user_text) and not rule.red_flags and not model.red_flags
+            and RANK[more_urgent(model.level, rule.level)] <= RANK["ROUTINE"]):
+        return Triage("NEEDS_INFO"), LONE_PUSHBACK_REPLY
     rule_wins = RANK[rule.level] > RANK[model.level]
     level = more_urgent(model.level, rule.level)
     if rule.red_flags and RANK[rule.level] >= RANK[model.level]:
