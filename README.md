@@ -28,6 +28,8 @@ works behind a rule-based safety net that it can never talk its way past.
 
 ![CareNudge demo: an urgent eye symptom gets a same-day banner and holds when the patient wants to wait, chest pressure gets a 911 banner, and a changing mole ends with booking a primary care visit](assets/demo.gif)
 
+**[Watch the 2-minute demo video on YouTube](https://youtu.be/C6eXPxKHmac)**
+
 **Not medical advice. Not a medical device. Not affiliated with Sutter Health or Epic.**
 Synthetic data only; do not enter real health information.
 
